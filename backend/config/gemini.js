@@ -45,7 +45,7 @@ export const geminiState = {
   cooldownUntil: 0,
   lastSuccessAt: 0,
   lastError: null,
-  cooldownMs: 60_000,
+  cooldownMs: 15_000,
 };
 
 export function setGeminiStatus(status, reason = null) {

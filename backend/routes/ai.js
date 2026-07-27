@@ -32,6 +32,16 @@ router.get('/status', (req, res) => {
   });
 });
 
+// Reset cooldown — forces AI back to live state immediately
+router.post('/reset-cooldown', (req, res) => {
+  geminiState.status = 'live';
+  geminiState.reason = null;
+  geminiState.cooldownUntil = 0;
+  geminiState.lastError = null;
+  console.log('🔄 [Gemini] Cooldown manually reset to live.');
+  res.json({ ok: true, message: 'Gemini cooldown reset. Next request will try the API.' });
+});
+
 // Chat — SSE streaming endpoint
 router.post('/chat', async (req, res) => {
   const { message, history, classLevel, course, stream, department, image } = req.body;

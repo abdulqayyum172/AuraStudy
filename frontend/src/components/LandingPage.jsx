@@ -1,6 +1,6 @@
 import React from 'react';
 import { DashboardIcon, CardsIcon, TimerIcon, NotesIcon, AIIcon, LearnIcon, CurriculumIcon, QuizIcon } from '../data/icons';
-import logoImage from '../assets/ai-study.png';
+import logoImage from '../assets/image(1).png';
 
 const LandingPage = ({ landingScrolled, setAuthMode, setShowAuth }) => {
   return (

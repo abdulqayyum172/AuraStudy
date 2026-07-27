@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, Component } from 'react';
 import './App.css';
 import heroImage from './assets/hero.png';
-import logoImage from './assets/ai-study.png';
+import logoImage from './assets/image(1).png';
 import PlannerTab from './components/PlannerTab.jsx';
 
 class ErrorBoundary extends Component {

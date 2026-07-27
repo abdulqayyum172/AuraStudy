@@ -14,6 +14,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const BREVO_API_KEY = process.env.BREVO_API_KEY;
+const FRONTEND_URL  = process.env.FRONTEND_URL || 'http://localhost:5173';
 const SENDER_EMAIL  = process.env.BREVO_SENDER_EMAIL || 'noreply@aurastudy.app';
 const SENDER_NAME   = process.env.BREVO_SENDER_NAME  || 'AuraStudy';
 
@@ -101,7 +102,7 @@ async function sendWelcomeEmail({ to, name }) {
                 </tr>`).join('')}
               </table>
               <div style="text-align:center;margin-top:40px;">
-                <a href="http://localhost:5173" style="display:inline-block;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;text-decoration:none;padding:14px 36px;border-radius:10px;font-size:15px;font-weight:600;letter-spacing:0.5px;">
+                <a href="${FRONTEND_URL}" style="display:inline-block;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;text-decoration:none;padding:14px 36px;border-radius:10px;font-size:15px;font-weight:600;letter-spacing:0.5px;">
                   Open My Workspace →
                 </a>
               </div>
@@ -119,7 +120,7 @@ async function sendWelcomeEmail({ to, name }) {
       </body>
       </html>
     `,
-    textContent: `Welcome to AuraStudy, ${displayName}!\n\nYour workspace is ready. Visit http://localhost:5173 to get started.\n\n— The AuraStudy Team`,
+    textContent: `Welcome to AuraStudy, ${displayName}!\n\nYour workspace is ready. Visit ${FRONTEND_URL} to get started.\n\n— The AuraStudy Team`,
   });
 }
 
@@ -217,7 +218,7 @@ async function sendStreakEmail({ to, name, streak }) {
                 That's incredible discipline. Don't break the chain!
               </p>
               <div style="margin-top:32px;">
-                <a href="http://localhost:5173" style="display:inline-block;background:linear-gradient(135deg,#dc2626,#7c3aed);color:#fff;text-decoration:none;padding:14px 36px;border-radius:10px;font-size:15px;font-weight:600;">
+                <a href="${FRONTEND_URL}" style="display:inline-block;background:linear-gradient(135deg,#dc2626,#7c3aed);color:#fff;text-decoration:none;padding:14px 36px;border-radius:10px;font-size:15px;font-weight:600;">
                   Continue Studying →
                 </a>
               </div>
@@ -232,7 +233,7 @@ async function sendStreakEmail({ to, name, streak }) {
       </body>
       </html>
     `,
-    textContent: `🔥 ${streak}-day streak! Keep it up. Visit http://localhost:5173`,
+    textContent: `🔥 ${streak}-day streak! Keep it up. Visit ${FRONTEND_URL}`,
   });
 }
 

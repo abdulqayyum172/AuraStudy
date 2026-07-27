@@ -40,7 +40,9 @@ import {
   logout,
 } from './firebase.js';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:5000/api'
+  : 'https://aurastudy-znwp.onrender.com/api';
 
 // Class levels offered at signup, grouped to mirror the Nigerian school
 // system: Basic (Primary), JSS, SSS, and Higher Institution.

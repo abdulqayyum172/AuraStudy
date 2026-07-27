@@ -3114,60 +3114,80 @@ Stay strictly on "${topic.name}" throughout your entire response.`;
         {/* ==================== LEARN TAB ==================== */}
         {activeTab === 'learn' && (
           <div className="tab-panel">
-            <div className="page-header">
-              <div className="page-title">
-                <h1>{activeLearnCategory ? LEARNING_CATEGORIES.find(c => c.id === activeLearnCategory)?.title || 'Learn' : 'What do you want to learn?'}</h1>
-                <p>{activeLearnCategory ? LEARNING_CATEGORIES.find(c => c.id === activeLearnCategory)?.subtitle || '' : 'Pick a category, choose a topic, and your AI tutor will teach it to you.'}</p>
-              </div>
-            </div>
 
             {!activeLearnCategory ? (
               <>
-                {/* Quick Stats Row */}
-                <div className="stats-grid" style={{ marginBottom: '32px' }}>
-                  <div className="card stat-card card-hover stagger-in" style={{ animationDelay: '0ms' }}>
-                    <div className="stat-icon" style={{ color: 'var(--accent-primary)' }}>⏱️</div>
-                    <div className="stat-info">
-                      <h3>{pomodoros.filter(p => p.type === 'focus').reduce((acc, curr) => acc + curr.duration, 0)}m</h3>
-                      <p>Focused Study</p>
+                {/* ── Greeting Banner ── */}
+                <div className="dash-greeting stagger-in" style={{ animationDelay: '0ms' }}>
+                  <div className="dash-greeting-text">
+                    <h1>
+                      {currentUser
+                        ? `Welcome back, ${currentUser.username?.split(' ')[0] || 'Student'} 👋`
+                        : 'What do you want to learn? 👋'}
+                    </h1>
+                    <p>
+                      {currentUser?.classLevel
+                        ? `${currentUser.classLevel}${currentUser.stream ? ' · ' + currentUser.stream : ''}${currentUser.course ? ' · ' + currentUser.course : ''} — pick a topic and your AI tutor will teach it.`
+                        : 'Pick a category, choose a topic, and your AI tutor will teach it to you.'}
+                    </p>
+                  </div>
+                  <div className="dash-greeting-glow" aria-hidden="true" />
+                </div>
+
+                {/* ── Stat Cards ── */}
+                <div className="dash-stats-grid">
+                  <div className="dash-stat-card dash-stat-purple stagger-in" style={{ animationDelay: '40ms' }}>
+                    <div className="dash-stat-icon">⏱️</div>
+                    <div className="dash-stat-body">
+                      <span className="dash-stat-value">
+                        {pomodoros.filter(p => p.type === 'focus').reduce((acc, curr) => acc + curr.duration, 0)}
+                        <span className="dash-stat-unit">m</span>
+                      </span>
+                      <span className="dash-stat-label">Focused Study</span>
                     </div>
                   </div>
-                  <div className="card stat-card card-hover stagger-in" style={{ animationDelay: '70ms' }}>
-                    <div className="stat-icon" style={{ color: 'var(--accent-secondary)' }}>🗂️</div>
-                    <div className="stat-info">
-                      <h3>{cards.length}</h3>
-                      <p>Flashcards Built</p>
+                  <div className="dash-stat-card dash-stat-blue stagger-in" style={{ animationDelay: '80ms' }}>
+                    <div className="dash-stat-icon">🗂️</div>
+                    <div className="dash-stat-body">
+                      <span className="dash-stat-value">{cards.length}</span>
+                      <span className="dash-stat-label">Flashcards</span>
                     </div>
                   </div>
-                  <div className="card stat-card card-hover stagger-in" style={{ animationDelay: '140ms' }}>
-                    <div className="stat-icon" style={{ color: 'var(--accent-primary)' }}>📝</div>
-                    <div className="stat-info">
-                      <h3>{notes.length}</h3>
-                      <p>Created Notes</p>
+                  <div className="dash-stat-card dash-stat-green stagger-in" style={{ animationDelay: '120ms' }}>
+                    <div className="dash-stat-icon">📝</div>
+                    <div className="dash-stat-body">
+                      <span className="dash-stat-value">{notes.length}</span>
+                      <span className="dash-stat-label">Study Notes</span>
                     </div>
                   </div>
-                  <div className="card stat-card card-hover stagger-in" style={{ animationDelay: '210ms' }}>
-                    <div className="stat-icon" style={{ color: 'var(--accent-secondary)' }}>📅</div>
-                    <div className="stat-info">
-                      <h3>{tasks.filter(t => t.status === 'completed').length} / {tasks.length}</h3>
-                      <p>Tasks Finished</p>
+                  <div className="dash-stat-card dash-stat-orange stagger-in" style={{ animationDelay: '160ms' }}>
+                    <div className="dash-stat-icon">✅</div>
+                    <div className="dash-stat-body">
+                      <span className="dash-stat-value">
+                        {tasks.filter(t => t.status === 'completed').length}
+                        <span className="dash-stat-unit">/{tasks.length}</span>
+                      </span>
+                      <span className="dash-stat-label">Tasks Done</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Search */}
-                <div style={{ maxWidth: '500px', marginBottom: '28px' }}>
+                {/* ── Search ── */}
+                <div className="dash-search-wrap stagger-in" style={{ animationDelay: '200ms' }}>
+                  <span className="dash-search-icon" aria-hidden="true">🔍</span>
                   <input
-                    className="input-field"
+                    className="dash-search-input"
                     placeholder="Search topics... e.g. 'JavaScript', 'photosynthesis', 'algebra'"
                     value={learnSearch}
                     onChange={(e) => setLearnSearch(e.target.value)}
-                    style={{ width: '100%' }}
                   />
                 </div>
 
-                {/* Category Grid */}
-                <div className="learn-categories">
+                {/* ── Category Grid ── */}
+                <p className="dash-section-label">
+                  {learnSearch.trim() ? 'Search Results' : 'Study Categories'}
+                </p>
+                <div className="dash-category-grid">
                   {(() => {
                     const levelInfo = getCategoryForLevel(currentUser?.classLevel, currentUser?.stream);
                     let cats = LEARNING_CATEGORIES.filter(cat => {
@@ -3175,19 +3195,13 @@ Stay strictly on "${topic.name}" throughout your entire response.`;
                       const q = learnSearch.toLowerCase();
                       return cat.title.toLowerCase().includes(q) || cat.topics.some(t => t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q));
                     });
-                    // When user has a class level, only show relevant categories
                     if (levelInfo.primary && !learnSearch.trim()) {
                       cats = cats.filter(cat => levelInfo.related.includes(cat.id));
                     }
-                    // Sort: primary first, then rest in order
                     if (levelInfo.primary) {
-                      cats.sort((a, b) => {
-                        const aPrimary = a.id === levelInfo.primary ? 0 : 1;
-                        const bPrimary = b.id === levelInfo.primary ? 0 : 1;
-                        return aPrimary - bPrimary;
-                      });
+                      cats.sort((a, b) => (a.id === levelInfo.primary ? -1 : b.id === levelInfo.primary ? 1 : 0));
                     }
-                    return cats.map((cat) => {
+                    return cats.map((cat, i) => {
                       const filteredTopics = learnSearch.trim()
                         ? cat.topics.filter(t => t.name.toLowerCase().includes(learnSearch.toLowerCase()) || t.desc.toLowerCase().includes(learnSearch.toLowerCase()))
                         : cat.topics;
@@ -3195,14 +3209,21 @@ Stay strictly on "${topic.name}" throughout your entire response.`;
                       return (
                         <button
                           key={cat.id}
-                          className="learn-category-card"
-                          style={{ '--cat-color': cat.color }}
+                          className="dash-cat-card stagger-in"
+                          style={{ '--cat-color': cat.color, animationDelay: `${240 + i * 50}ms` }}
                           onClick={() => setActiveLearnCategory(cat.id)}
                         >
-                          <div className="learn-category-accent" style={{ background: cat.color }}></div>
-                          <h3>{cat.title} {isRecommended && <span style={{ fontSize: '0.7rem', color: 'var(--success)', fontWeight: 600, marginLeft: '6px' }}>Your Level</span>}</h3>
-                          <p className="learn-category-subtitle">{cat.subtitle}</p>
-                          <span className="learn-topic-count">{learnSearch.trim() ? filteredTopics.length + ' matching' : cat.topics.length + ' topics'}</span>
+                          <div className="dash-cat-bar" style={{ background: cat.color }} />
+                          <div className="dash-cat-body">
+                            <div className="dash-cat-top">
+                              <span className="dash-cat-title">{cat.title}</span>
+                              {isRecommended && <span className="dash-cat-badge">Your Level</span>}
+                            </div>
+                            <span className="dash-cat-sub">{cat.subtitle}</span>
+                            <span className="dash-cat-count">
+                              {learnSearch.trim() ? filteredTopics.length + ' matching' : cat.topics.length + ' topics'} →
+                            </span>
+                          </div>
                         </button>
                       );
                     });
@@ -3211,9 +3232,13 @@ Stay strictly on "${topic.name}" throughout your entire response.`;
               </>
             ) : (
               <>
-                <button className="learn-back-btn" onClick={() => setActiveLearnCategory(null)}>
-                  ← All Categories
-                </button>
+                <div className="page-header">
+                  <div className="page-title">
+                    <button className="learn-back-btn" onClick={() => setActiveLearnCategory(null)}>← All Categories</button>
+                    <h1>{LEARNING_CATEGORIES.find(c => c.id === activeLearnCategory)?.title || 'Learn'}</h1>
+                    <p>{LEARNING_CATEGORIES.find(c => c.id === activeLearnCategory)?.subtitle || ''}</p>
+                  </div>
+                </div>
                 <div className="learn-topic-grid">
                   {LEARNING_CATEGORIES.find(c => c.id === activeLearnCategory)?.topics.map((topic, i) => (
                     <button

@@ -869,30 +869,24 @@ function App() {
           throw new Error('Please select your course of study.');
         }
 
-        // Step 1: Send verification code to email
-        const res = await fetch(`${API_BASE}/auth/send-code`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: trimmedEmail }),
-        });
-        const data = await res.json();
-        if (!res.ok) {
-          throw new Error(data.error || 'Failed to send verification code.');
-        }
+        pendingClassLevelRef.current = authClassLevel;
+        pendingStreamRef.current = isSSSLevel(authClassLevel) ? authStream : '';
+        pendingDepartmentRef.current = isHigherInstitutionLevel(authClassLevel) ? authDepartment : '';
+        pendingCourseRef.current = isHigherInstitutionLevel(authClassLevel) ? authCourse : '';
 
-        // Step 2: Show the code entry screen
-        setAuthPendingVerification(true);
+        // Register directly with Firebase (no email verification step)
+        await registerWithEmail(trimmedEmail, authPassword, trimmedName || undefined);
+
+        setAuthEmail('');
+        setAuthPassword('');
+        setAuthDisplayName('');
+        setAuthClassLevel('');
+        setAuthStream('');
+        setAuthDepartment('');
+        setAuthCourse('');
         setAuthError('');
         return;
       }
-      setAuthEmail('');
-      setAuthPassword('');
-      setAuthDisplayName('');
-      setAuthClassLevel('');
-      setAuthStream('');
-      setAuthDepartment('');
-      setAuthCourse('');
-    setAuthError('');
     } catch (err) {
       console.error(err);
       const friendlyErrors = {

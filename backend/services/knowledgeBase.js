@@ -189,31 +189,40 @@ function generateDetailedAnswer(topic, classLevel, course, stream) {
 
 function findKnowledgeAnswer(query) {
   const q = query.toLowerCase().replace(/[?!.,;:'"]/g, ' ').replace(/\s+/g, ' ').trim();
-  // Try exact keyword match first
+  // Try exact keyword match first — keyword must appear as a whole word or phrase
   let bestMatch = null;
   let bestScore = 0;
   for (const [keyword, indices] of knowledgeIndex) {
-    if (q.includes(keyword)) {
-      const score = keyword.length; // longer keyword = more specific match
+    // Use word-boundary check: keyword must not be a substring of a larger word
+    const kw = keyword.trim();
+    const kwRegex = new RegExp('(^|\\s)' + kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(\\s|$)');
+    if (kwRegex.test(q) || q.includes(kw)) {
+      // Extra check: if keyword ends with space (e.g. 'node '), the space is a word boundary guard
+      // Reject if the keyword is very short and only partially inside a longer word
+      const score = kw.length;
       if (score > bestScore) {
         bestScore = score;
         bestMatch = KNOWLEDGE_BASE[indices[0]];
       }
     }
   }
-  if (bestMatch) return bestMatch.answer;
+  // Only return a match if the keyword is at least 5 chars long (prevents 'node' matching 'noun')
+  if (bestMatch && bestScore >= 5) return bestMatch.answer;
 
-  // Fuzzy match: try partial keyword overlap (stem matching)
-  const queryWords = q.split(/\s+/).filter(w => w.length > 2);
+  // Fuzzy match: only for longer words (>4 chars) with strict score threshold
+  const queryWords = q.split(/\s+/).filter(w => w.length > 3);
   let fuzzyBest = null;
   let fuzzyBestScore = 0;
   for (const entry of KNOWLEDGE_BASE) {
     let matchScore = 0;
     for (const kw of entry.keywords) {
-      const kwWords = kw.toLowerCase().split(/\s+/);
+      const kwWords = kw.toLowerCase().split(/\s+/).filter(w => w.length > 4);
       for (const qw of queryWords) {
         for (const kwW of kwWords) {
-          if (qw === kwW || qw.startsWith(kwW) || kwW.startsWith(qw) || levenshtein(qw, kwW) <= 2) {
+          // Only exact matches or very-close matches on longer words
+          if (qw === kwW) {
+            matchScore += kwW.length * 2; // reward exact matches more
+          } else if (kwW.length > 5 && qw.length > 5 && levenshtein(qw, kwW) <= 1) {
             matchScore += kwW.length;
           }
         }
@@ -224,7 +233,8 @@ function findKnowledgeAnswer(query) {
       fuzzyBest = entry;
     }
   }
-  if (fuzzyBest && fuzzyBestScore >= 4) return fuzzyBest.answer;
+  // High threshold to avoid wrong matches
+  if (fuzzyBest && fuzzyBestScore >= 10) return fuzzyBest.answer;
 
   return null;
 }

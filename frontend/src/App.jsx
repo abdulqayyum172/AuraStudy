@@ -4377,6 +4377,29 @@ Stay strictly on "${topic.name}" throughout your entire response.`;
           </div>
         )}
 
+        {/* ==================== PLANNER TAB ==================== */}
+        {activeTab === 'planner' && (
+          <PlannerTab
+            currentUser={currentUser}
+            tasks={tasks}
+            showTaskModal={showTaskModal}
+            setShowTaskModal={setShowTaskModal}
+            newTaskTitle={newTaskTitle}
+            setNewTaskTitle={setNewTaskTitle}
+            newTaskDesc={newTaskDesc}
+            setNewTaskDesc={setNewTaskDesc}
+            newTaskPriority={newTaskPriority}
+            setNewTaskPriority={setNewTaskPriority}
+            newTaskDueDate={newTaskDueDate}
+            setNewTaskDueDate={setNewTaskDueDate}
+            newTaskEstPomos={newTaskEstPomos}
+            setNewTaskEstPomos={setNewTaskEstPomos}
+            handleCreateTask={handleCreateTask}
+            updateTaskStatus={updateTaskStatus}
+            handleDeleteTask={handleDeleteTask}
+          />
+        )}
+
         {/* ==================== AI ASSISTANT TAB ==================== */}
         {activeTab === 'ai' && (
           <div className="tab-panel">

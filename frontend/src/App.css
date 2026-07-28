@@ -650,55 +650,124 @@
 .score-5 { background: var(--accent-primary); color: var(--text-on-accent); }
 
 /* ==========================================================================
-   Pomodoro Timer
+   Pomodoro Timer — Glassmorphism
    ========================================================================== */
-.pomodoro-container {
+
+/* ── Container ── */
+.pomo-glass-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   max-width: 520px;
   margin: 0 auto;
+  position: relative;
 }
 
-.timer-modes {
+/* ── Ambient glow orb ── */
+.pomo-glow-orb {
+  position: absolute;
+  top: -60px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.6s ease, background 0.6s ease;
+}
+.pomo-glow-orb.is-active {
+  opacity: 0.32;
+  animation: pomoPulse 3s ease-in-out infinite;
+}
+.pomo-glow-focus  { background: #7c5cfc; }
+.pomo-glow-shortBreak { background: #38bdf8; }
+.pomo-glow-longBreak  { background: #34d399; }
+
+@keyframes pomoPulse {
+  0%, 100% { transform: scale(1);   opacity: 0.28; }
+  50%      { transform: scale(1.1); opacity: 0.38; }
+}
+
+/* ── Mode Pills ── */
+.pomo-mode-pills {
   display: flex;
-  gap: 3px;
-  background: var(--surface-subtle);
-  padding: 3px;
-  border-radius: 7px;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 12px;
+  background: var(--surface-ghost);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-light);
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
-.timer-mode-btn {
-  background: none;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 5px;
+.pomo-mode-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 8px 18px;
+  border-radius: 9px;
   color: var(--text-muted);
   font-weight: 500;
   font-size: 0.82rem;
   cursor: pointer;
-}
-
-.timer-mode-btn.active {
-  background: var(--bg-card);
-  color: var(--accent-secondary);
-  border: 1px solid var(--border-light);
-}
-
-.timer-circle-container {
+  transition: all 0.25s ease;
   position: relative;
-  width: 240px;
-  height: 240px;
+}
+.pomo-mode-pill:hover {
+  color: var(--text-main);
+  background: var(--surface-hover);
+}
+.pomo-mode-pill.active {
+  background: var(--bg-card);
+  color: var(--text-main);
+  border-color: var(--border-light);
+  box-shadow: var(--shadow-sm);
+  font-weight: 600;
+}
+
+.pomo-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: background 0.25s ease;
+}
+.pomo-pill-focus.active .pomo-pill-dot   { background: #7c5cfc; }
+.pomo-pill-shortBreak.active .pomo-pill-dot { background: #38bdf8; }
+.pomo-pill-longBreak.active .pomo-pill-dot  { background: #34d399; }
+
+/* ── Ring Wrapper ── */
+.pomo-ring-wrapper {
+  position: relative;
+  width: 300px;
+  height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 28px;
   border-radius: 50%;
+  background: var(--surface-ghost);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-light);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: box-shadow 0.4s ease, border-color 0.4s ease;
+}
+.pomo-ring-wrapper.is-running {
+  border-color: rgba(124, 92, 252, 0.18);
+  box-shadow:
+    0 4px 32px rgba(124, 92, 252, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-.timer-ring-svg {
+/* ── SVG Ring ── */
+.pomo-ring-svg {
   position: absolute;
   top: 0;
   left: 0;
@@ -707,60 +776,251 @@
   transform: rotate(-90deg);
 }
 
-.timer-ring-bg {
-    fill: none;
-    stroke: var(--border-light);
-    stroke-width: 10px;
-  }
-
-.timer-ring-fill {
+.pomo-ring-bg {
   fill: none;
-  stroke: url(#timerGradient);
-  stroke-width: 10px;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 0.1s linear;
+  stroke: var(--border-light);
+  stroke-width: 8px;
 }
 
-.timer-display {
+.pomo-ring-fill {
+  fill: none;
+  stroke: url(#pomoGradient);
+  stroke-width: 8px;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.35s ease;
+}
+
+/* ── Time Display ── */
+.pomo-time-display {
   display: flex;
   flex-direction: column;
   align-items: center;
   z-index: 2;
 }
 
-.timer-time {
-  font-size: 2.8rem;
+.pomo-time-text {
+  font-size: 3.2rem;
   font-weight: 700;
   line-height: 1;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
 }
 
-.timer-label {
-  font-size: 0.78rem;
+.pomo-mode-label {
+  font-size: 0.72rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.pomo-label-focus     { color: #7c5cfc; }
+.pomo-label-shortBreak { color: #38bdf8; }
+.pomo-label-longBreak  { color: #34d399; }
+
+/* ── Duration Editor ── */
+.pomo-duration-editor {
+  margin-top: 2px;
+}
+
+.pomo-duration-btn {
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.pomo-duration-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text-main);
+  border-color: var(--border-hover);
+}
+
+.pomo-duration-input-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface-subtle);
+  border: 1px solid var(--accent-primary);
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.pomo-duration-input {
+  width: 36px;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text-main);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  font-family: inherit;
+}
+.pomo-duration-input::-webkit-inner-spin-button,
+.pomo-duration-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.pomo-duration-unit {
+  font-size: 0.65rem;
   color: var(--text-muted);
 }
 
-.timer-controls {
+/* ── Session Dots ── */
+.pomo-session-dots {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 8px;
   margin-bottom: 28px;
 }
 
-.btn-play-pause {
-  width: 56px;
-  height: 56px;
+.pomo-session-dot {
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: var(--accent-primary);
-  border: none;
-    color: var(--text-on-accent);
-    font-size: 1.4rem;
+  background: var(--border-light);
+  border: 1.5px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+.pomo-session-dot.filled {
+  border-color: transparent;
+}
+.pomo-dot-focus.filled     { background: #7c5cfc; box-shadow: 0 0 8px rgba(124, 92, 252, 0.4); }
+.pomo-dot-shortBreak.filled { background: #38bdf8; box-shadow: 0 0 8px rgba(56, 189, 248, 0.4); }
+.pomo-dot-longBreak.filled  { background: #34d399; box-shadow: 0 0 8px rgba(52, 211, 153, 0.4); }
+
+.pomo-session-count {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-left: 4px;
+  font-weight: 500;
+}
+
+/* ── Controls ── */
+.pomo-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.pomo-ctrl-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--surface-ghost);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-light);
+  color: var(--text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease;
+}
+.pomo-ctrl-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text-main);
+  border-color: var(--border-hover);
+}
+
+.pomo-play-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 20px rgba(124, 92, 252, 0.35);
+}
+.pomo-play-btn.focus {
+  background: linear-gradient(135deg, #7c5cfc, #a78bfa);
+  box-shadow: 0 4px 20px rgba(124, 92, 252, 0.35);
+}
+.pomo-play-btn.shortBreak {
+  background: linear-gradient(135deg, #38bdf8, #22d3ee);
+  box-shadow: 0 4px 20px rgba(56, 189, 248, 0.35);
+}
+.pomo-play-btn.longBreak {
+  background: linear-gradient(135deg, #34d399, #6ee7b7);
+  box-shadow: 0 4px 20px rgba(52, 211, 153, 0.35);
+}
+.pomo-play-btn:hover {
+  transform: scale(1.08);
+}
+.pomo-play-btn:active {
+  transform: scale(0.96);
+}
+
+/* ── Stats Bar ── */
+.pomo-stats-bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background: var(--surface-ghost);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-light);
+  margin-bottom: 24px;
+}
+
+.pomo-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pomo-stat-icon {
+  font-size: 0.85rem;
+}
+
+.pomo-stat-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.pomo-stat-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.pomo-stat-divider {
+  width: 1px;
+  height: 18px;
+  background: var(--border-light);
+}
+
+/* ── Glass Card (Focus Logger) ── */
+.pomo-glass-card {
+  width: 100%;
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--surface-ghost);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.pomo-card-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin: 0 0 16px;
+  color: var(--text-main);
 }
 
 /* ==========================================================================
@@ -3908,12 +4168,16 @@
   .deck-grid { grid-template-columns: 1fr; }
 
   /* Pomodoro */
-  .pomodoro-container { padding: 0 8px; }
-  .timer-circle-container { width: 180px; height: 180px; margin-bottom: 20px; }
-  .timer-time { font-size: 2.2rem; }
-  .pomodoro-display { font-size: 3rem; }
-  .pomodoro-controls { gap: 10px; flex-wrap: wrap; justify-content: center; }
-  .pomodoro-controls button { min-height: 48px; flex: 1; }
+  .pomo-glass-container { padding: 0 8px; }
+  .pomo-ring-wrapper { width: 220px; height: 220px; margin-bottom: 20px; }
+  .pomo-time-text { font-size: 2.4rem; }
+  .pomo-controls { gap: 12px; }
+  .pomo-play-btn { width: 54px; height: 54px; }
+  .pomo-play-btn svg { width: 20px; height: 20px; }
+  .pomo-stats-bar { padding: 10px 16px; gap: 14px; }
+  .pomo-glass-card { padding: 16px; }
+  .pomo-mode-pills { gap: 4px; padding: 3px; }
+  .pomo-mode-pill { padding: 6px 12px; font-size: 0.78rem; }
 
   /* Notes */
   .notes-container { flex-direction: column; height: auto; }

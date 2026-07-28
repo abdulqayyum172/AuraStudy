@@ -3,6 +3,7 @@ import './App.css';
 import heroImage from './assets/hero.png';
 import logoImage from './assets/image(1).png';
 import PlannerTab from './components/PlannerTab.jsx';
+import PomodoroTab from './components/PomodoroTab.jsx';
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -638,6 +639,15 @@ function App() {
   const [timerActive, setTimerActive] = useState(false);
   const [timerTotalDuration, setTimerTotalDuration] = useState(25 * 60);
   const [pomoTaskLink, setPomoTaskLink] = useState('');
+  const [customDurations, setCustomDurations] = useState({ focus: 25, shortBreak: 5, longBreak: 15 });
+  const [completedPomosToday, setCompletedPomosToday] = useState(() => {
+    const saved = localStorage.getItem('pomo-completed-today');
+    if (saved) {
+      const { count, date } = JSON.parse(saved);
+      if (date === new Date().toDateString()) return count;
+    }
+    return 0;
+  });
 
   // Quiz States
   const [quizInput, setQuizInput] = useState('');
@@ -1289,12 +1299,19 @@ function App() {
     if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
     
     setTimerMode(mode);
-    let duration = 25 * 60;
-    if (mode === 'shortBreak') duration = 5 * 60;
-    else if (mode === 'longBreak') duration = 15 * 60;
+    const duration = (customDurations[mode] || 25) * 60;
 
     setTimeLeft(duration);
     setTimerTotalDuration(duration);
+  };
+
+  const setNewDuration = (mode, minutes) => {
+    setCustomDurations(prev => ({ ...prev, [mode]: minutes }));
+    if (timerMode === mode && !timerActive) {
+      const secs = minutes * 60;
+      setTimeLeft(secs);
+      setTimerTotalDuration(secs);
+    }
   };
 
   const toggleTimer = () => {
@@ -1357,6 +1374,14 @@ function App() {
         const logged = await response.json();
         setPomodoros([...pomodoros, logged]);
         generateActivitiesList([...pomodoros, logged], cards);
+
+        if (timerMode === 'focus') {
+          setCompletedPomosToday(prev => {
+            const next = prev + 1;
+            localStorage.setItem('pomo-completed-today', JSON.stringify({ count: next, date: new Date().toDateString() }));
+            return next;
+          });
+        }
 
         // Update task progress if linked
         if (pomoTaskLink && timerMode === 'focus') {
@@ -3746,82 +3771,27 @@ Stay strictly on "${topic.name}" throughout your entire response.`;
 
         {/* ==================== POMODORO TAB ==================== */}
         {activeTab === 'pomodoro' && (
-          <div className="pomodoro-container tab-panel">
-            <div className="page-header" style={{ width: '100%' }}>
-              <div className="page-title">
-                <h1>Focus Pomodoro</h1>
-                <p>{currentUser?.classLevel ? `${currentUser.classLevel} study timer` : 'Train your concentration. We log your statistics automatically.'}</p>
-              </div>
-            </div>
-
-            {/* Mode selection */}
-            <div className="timer-modes">
-              <button className={`timer-mode-btn ${timerMode === 'focus' ? 'active' : ''}`} onClick={() => changeTimerMode('focus')}>Focus Session</button>
-              <button className={`timer-mode-btn ${timerMode === 'shortBreak' ? 'active' : ''}`} onClick={() => changeTimerMode('shortBreak')}>Short Break</button>
-              <button className={`timer-mode-btn ${timerMode === 'longBreak' ? 'active' : ''}`} onClick={() => changeTimerMode('longBreak')}>Long Break</button>
-            </div>
-
-            {/* Radial Timer Ring */}
-            <div className={`timer-circle-container${timerActive ? ' is-running' : ''}`}>
-              <svg className="timer-ring-svg">
-                <defs>
-                  <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#8b5cf6" />
-                    <stop offset="100%" stopColor="#06b6d4" />
-                  </linearGradient>
-                </defs>
-                <circle className="timer-ring-bg" cx="140" cy="140" r="125" />
-                <circle
-                  className="timer-ring-fill"
-                  cx="140"
-                  cy="140"
-                  r="125"
-                  strokeDasharray={`${2 * Math.PI * 125}`}
-                  strokeDashoffset={`${2 * Math.PI * 125 * (1 - timeLeft / timerTotalDuration)}`}
-                />
-              </svg>
-              <div className="timer-display">
-                <div className="timer-time">{formatTime(timeLeft)}</div>
-                <div className="timer-label">{timerMode === 'focus' ? 'Focus time' : 'Break time'}</div>
-              </div>
-            </div>
-
-            {/* Controls */}
-            <div className="timer-controls">
-              <button className="btn btn-secondary" onClick={resetTimer}>Reset</button>
-              <button className="btn-play-pause" onClick={toggleTimer}>
-                {timerActive ? '⏸' : '▶'}
-              </button>
-              <button className="btn btn-secondary" onClick={handleTimerComplete}>Skip</button>
-            </div>
-
-            {/* Pomo Focus logging details */}
-            {timerMode === 'focus' && (
-              <div className="card" style={{ width: '100%', marginTop: '20px' }}>
-                <h3 style={{ marginBottom: '16px' }}>Focus Logger</h3>
-                <div className="input-group">
-                  <label htmlFor="pomoTask">Link to Active Task</label>
-                  <select id="pomoTask" className="input-field" value={pomoTaskLink} onChange={(e) => setPomoTaskLink(e.target.value)}>
-                    <option value="">No task linked</option>
-                    {tasks.filter(t => t.status !== 'completed').map(task => (
-                      <option key={task.id} value={task.id}>{task.title}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="input-group" style={{ marginBottom: 0 }}>
-                  <label htmlFor="pomoNotes">What are you concentrating on?</label>
-                  <input
-                    id="pomoNotes"
-                    type="text"
-                    placeholder="e.g. Reading about closures, CSS layout styling..."
-                    className="input-field"
-                    value={pomoSessionNotes}
-                    onChange={(e) => setPomoSessionNotes(e.target.value)}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
+          <PomodoroTab
+            currentUser={currentUser}
+            timerMode={timerMode}
+            timeLeft={timeLeft}
+            timerActive={timerActive}
+            timerTotalDuration={timerTotalDuration}
+            pomoTaskLink={pomoTaskLink}
+            setPomoTaskLink={setPomoTaskLink}
+            pomoSessionNotes={pomoSessionNotes}
+            setPomoSessionNotes={setPomoSessionNotes}
+            tasks={tasks}
+            changeTimerMode={changeTimerMode}
+            toggleTimer={toggleTimer}
+            handleTimerComplete={handleTimerComplete}
+            resetTimer={resetTimer}
+            formatTime={formatTime}
+            completedPomosToday={completedPomosToday}
+            customDurations={customDurations}
+            setCustomDurations={setCustomDurations}
+            setNewDuration={setNewDuration}
+          />
         )}
 
         {/* ==================== NOTES TAB ==================== */}

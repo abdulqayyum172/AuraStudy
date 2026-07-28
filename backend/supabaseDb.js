@@ -305,6 +305,13 @@ class SupabaseDatabase {
     return data ? this._mapProfile(data) : null;
   }
 
+  async deleteUserProfile(uid) {
+    // Delete profile, conversations, and quiz history for this user
+    await this.client.from('conversations').delete().eq('uid', uid);
+    await this.client.from('quiz_history').delete().eq('uid', uid);
+    await this.client.from('profiles').delete().eq('uid', uid);
+  }
+
   // ── Quiz History ───────────────────────────────────────────────────────────
 
   async addQuizHistory(data) {

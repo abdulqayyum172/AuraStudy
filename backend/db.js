@@ -77,6 +77,7 @@ class DatabaseProxy {
   // User Profiles (class level, etc.)
   async upsertUserProfile(uid, updates) { return this.activeDb.upsertUserProfile(uid, updates); }
   async getUserProfile(uid) { return this.activeDb.getUserProfile(uid); }
+  async deleteUserProfile(uid) { return this.activeDb.deleteUserProfile(uid); }
 
   // Quiz History
   async addQuizHistory(data) { return this.activeDb.addQuizHistory(data); }

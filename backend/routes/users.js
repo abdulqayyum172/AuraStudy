@@ -38,6 +38,15 @@ router.put('/:uid/profile', async (req, res) => {
   }
 });
 
+router.delete('/:uid/profile', async (req, res) => {
+  try {
+    await db.deleteUserProfile(req.params.uid);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.get('/courses', (req, res) => {
   const { department } = req.query;
   if (department) {

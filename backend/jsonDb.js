@@ -383,6 +383,13 @@ class JsonDatabase {
     return this.data.profiles.find(p => p.uid === uid) || null;
   }
 
+  async deleteUserProfile(uid) {
+    if (this.data.profiles) this.data.profiles = this.data.profiles.filter(p => p.uid !== uid);
+    if (this.data.conversations) this.data.conversations = this.data.conversations.filter(c => c.uid !== uid);
+    if (this.data.quizHistory) this.data.quizHistory = this.data.quizHistory.filter(q => q.uid !== uid);
+    await this._save();
+  }
+
   // ── Quiz History ──────────────────────────────────────────────────────────
 
   async addQuizHistory(data) {

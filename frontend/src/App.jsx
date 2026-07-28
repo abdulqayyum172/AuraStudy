@@ -583,6 +583,15 @@ function App() {
   }, [theme]);
   const toggleTheme = () => setTheme(t => t === 'light' ? 'dark' : 'light');
 
+  // Sync focus preferences from settings to pomodoro custom durations
+  useEffect(() => {
+    setCustomDurations({
+      focus: focusPrefs.focusDuration || 25,
+      shortBreak: focusPrefs.shortBreakDuration || 5,
+      longBreak: focusPrefs.longBreakDuration || 15,
+    });
+  }, [focusPrefs]);
+
   // Learn page state
   const [activeLearnCategory, setActiveLearnCategory] = useState(null);
   const [learnSearch, setLearnSearch] = useState('');
@@ -631,7 +640,18 @@ function App() {
   const [timerActive, setTimerActive] = useState(false);
   const [timerTotalDuration, setTimerTotalDuration] = useState(25 * 60);
   const [pomoTaskLink, setPomoTaskLink] = useState('');
-  const [customDurations, setCustomDurations] = useState({ focus: 25, shortBreak: 5, longBreak: 15 });
+  const [customDurations, setCustomDurations] = useState(() => {
+    const saved = localStorage.getItem('aura-focus-prefs');
+    if (saved) {
+      const prefs = JSON.parse(saved);
+      return { focus: prefs.focusDuration || 25, shortBreak: prefs.shortBreakDuration || 5, longBreak: prefs.longBreakDuration || 15 };
+    }
+    return { focus: 25, shortBreak: 5, longBreak: 15 };
+  });
+  const [focusPrefs, setFocusPrefs] = useState(() => {
+    const saved = localStorage.getItem('aura-focus-prefs');
+    return saved ? JSON.parse(saved) : { focusDuration: 25, shortBreakDuration: 5, longBreakDuration: 15, longBreakInterval: 4, autoStartBreaks: false, autoStartFocus: false, timerSound: true };
+  });
   const [completedPomosToday, setCompletedPomosToday] = useState(() => {
     const saved = localStorage.getItem('pomo-completed-today');
     if (saved) {
@@ -1329,20 +1349,22 @@ function App() {
   const handleTimerComplete = async () => {
     setTimerActive(false);
     
-    // Synthesize beep sound via Web Audio API (premium design touch, zero dependencies)
-    try {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const oscillator = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // A5 note
-      gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
-      oscillator.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-      oscillator.start();
-      oscillator.stop(audioCtx.currentTime + 0.8);
-    } catch (e) {
-      console.log('Audio playback not supported or interaction blocked');
+    // Synthesize beep sound via Web Audio API (if enabled in preferences)
+    if (focusPrefs.timerSound) {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.8);
+      } catch (e) {
+        console.log('Audio playback not supported or interaction blocked');
+      }
     }
 
     alert(`Pomodoro ${timerMode === 'focus' ? 'Focus Session' : 'Break'} finished!`);
@@ -1393,11 +1415,33 @@ function App() {
     }
 
     setPomoSessionNotes('');
-    // Auto toggle to break/focus
+    // Auto toggle to break/focus with optional auto-start
     if (timerMode === 'focus') {
       changeTimerMode('shortBreak');
+      if (focusPrefs.autoStartBreaks) {
+        setTimeout(() => {
+          setTimerActive(true);
+          timerIntervalRef.current = setInterval(() => {
+            setTimeLeft(prev => {
+              if (prev <= 1) { clearInterval(timerIntervalRef.current); handleTimerComplete(); return 0; }
+              return prev - 1;
+            });
+          }, 1000);
+        }, 500);
+      }
     } else {
       changeTimerMode('focus');
+      if (focusPrefs.autoStartFocus) {
+        setTimeout(() => {
+          setTimerActive(true);
+          timerIntervalRef.current = setInterval(() => {
+            setTimeLeft(prev => {
+              if (prev <= 1) { clearInterval(timerIntervalRef.current); handleTimerComplete(); return 0; }
+              return prev - 1;
+            });
+          }, 1000);
+        }, 500);
+      }
     }
   };
 
@@ -4709,6 +4753,8 @@ Stay strictly on "${topic.name}" throughout your entire response.`;
             addToast={addToast}
             API_BASE={API_BASE}
             setCurrentUser={setCurrentUser}
+            focusPrefs={focusPrefs}
+            setFocusPrefs={setFocusPrefs}
           />
         )}
       </main>

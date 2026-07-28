@@ -1335,9 +1335,8 @@ function App() {
       timerIntervalRef.current = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 1) {
-            // Timer expired!
             clearInterval(timerIntervalRef.current);
-            handleTimerComplete();
+            setTimeout(() => handleTimerComplete(), 0);
             return 0;
           }
           return prev - 1;
@@ -1423,7 +1422,7 @@ function App() {
           setTimerActive(true);
           timerIntervalRef.current = setInterval(() => {
             setTimeLeft(prev => {
-              if (prev <= 1) { clearInterval(timerIntervalRef.current); handleTimerComplete(); return 0; }
+              if (prev <= 1) { clearInterval(timerIntervalRef.current); setTimeout(() => handleTimerComplete(), 0); return 0; }
               return prev - 1;
             });
           }, 1000);
@@ -1436,7 +1435,7 @@ function App() {
           setTimerActive(true);
           timerIntervalRef.current = setInterval(() => {
             setTimeLeft(prev => {
-              if (prev <= 1) { clearInterval(timerIntervalRef.current); handleTimerComplete(); return 0; }
+              if (prev <= 1) { clearInterval(timerIntervalRef.current); setTimeout(() => handleTimerComplete(), 0); return 0; }
               return prev - 1;
             });
           }, 1000);

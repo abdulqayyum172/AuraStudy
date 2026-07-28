@@ -155,7 +155,44 @@ const KNOWLEDGE_BASE = [
   { keywords: ['nutrition', 'diet', 'healthy eating', 'food', 'vitamins'], answer: `## Nutrition — Quick Guide\n\n### Macronutrients\n| Macro | Function | Sources |\n|-------|----------|---------|\n| Carbs | Energy | Rice, bread, yam, potatoes |\n| Protein | Muscle repair | Beans, eggs, fish, chicken |\n| Fats | Brain health | Avocado, nuts, olive oil |\n\n### Micronutrients\n| Vitamin | Function | Sources |\n|---------|----------|----------|\n| A | Vision | Carrots, liver |\n| C | Immunity | Oranges, peppers |\n| D | Bones | Sunlight, milk |\n| Iron | Blood | Spinach, red meat |\n\n### Hydration\n- Drink 8 glasses (2L) of water daily\n- More during exercise or hot weather\n\n### Healthy Plate Model\n\`\`\`\n┌─────────────────────────┐\n│  Vegetables/Fruits (50%) │\n├────────────┬────────────┤\n│ Carbs (25%)│Protein(25%)│\n└────────────┴────────────┘\n\`\`\`\n\nWant a personalized meal plan?` },
 
   // ===== MOTIVATION =====
-  { keywords: ['motivation', 'inspiration', 'discipline', 'mindset', 'success', 'goals'], answer: `## Motivation & Goal Setting\n\n### SMART Goals\n| Letter | Meaning | Example |\n|--------|---------|----------|\n| S | Specific | "Study 2 hours daily" |\n| M | Measurable | "Complete 5 chapters" |\n| A | Achievable | "Pass exam with B" |\n| R | Relevant | "Aligned with career" |\n| T | Time-bound | "By end of semester" |\n\n### Building Discipline\n1. Start small (2 minutes rule)\n2. Create a routine\n3. Track your progress\n4. Reward yourself\n5. Find an accountability partner\n\n### Daily Productivity Habits\n- Wake up early\n- Plan your day the night before\n- Do hardest task first\n- Take regular breaks (Pomodoro)\n- Review achievements before sleep\n\n### Remember\n> "The secret of getting ahead is getting started." — Mark Twain\n\nNeed help setting specific academic goals?` }
+  { keywords: ['motivation', 'inspiration', 'discipline', 'mindset', 'success', 'goals'], answer: `## Motivation & Goal Setting\n\n### SMART Goals\n| Letter | Meaning | Example |\n|--------|---------|----------|\n| S | Specific | "Study 2 hours daily" |\n| M | Measurable | "Complete 5 chapters" |\n| A | Achievable | "Pass exam with B" |\n| R | Relevant | "Aligned with career" |\n| T | Time-bound | "By end of semester" |\n\n### Building Discipline\n1. Start small (2 minutes rule)\n2. Create a routine\n3. Track your progress\n4. Reward yourself\n5. Find an accountability partner\n\n### Daily Productivity Habits\n- Wake up early\n- Plan your day the night before\n- Do hardest task first\n- Take regular breaks (Pomodoro)\n- Review achievements before sleep\n\n### Remember\n> "The secret of getting ahead is getting started." — Mark Twain\n\nNeed help setting specific academic goals?` },
+
+  // ===== MORE SCIENCE =====
+  { keywords: ['circulatory system', 'heart', 'blood vessel', 'blood', 'artery', 'vein'], answer: `## The Circulatory System\n\nThe **circulatory system** transports blood, nutrients, oxygen, and waste throughout the body.\n\n### Key Components\n| Part | Function |\n|------|----------|\n| **Heart** | Pumps blood through the body |\n| **Arteries** | Carry oxygenated blood AWAY from heart |\n| **Veins** | Carry deoxygenated blood TOWARD heart |\n| **Capillaries** | Tiny vessels where exchange occurs |\n| **Blood** | Transports O₂, CO₂, nutrients, hormones, waste |\n\n### The Heart\n- **4 chambers:** Right atrium, right ventricle, left atrium, left ventricle\n- Pumps ~5 liters of blood per minute\n- Beats about 100,000 times per day\n\n### Two Circuits\n1. **Pulmonary circuit:** Heart → Lungs → Heart (picks up O₂, drops CO₂)\n2. **Systemic circuit:** Heart → Body → Heart (delivers O₂, picks up CO₂)\n\n### Blood Components\n| Component | Role |\n|-----------|------|\n| Red blood cells | Carry oxygen (hemoglobin) |\n| White blood cells | Fight infection |\n| Platelets | Help blood clot |\n| Plasma | Liquid that carries everything |\n\n### Common Issues\n- **Hypertension:** High blood pressure — damages arteries over time\n- **Atherosclerosis:** Plaque buildup narrows arteries\n- **Anemia:** Not enough red blood cells = less oxygen delivery\n\nWant to learn about the respiratory or digestive system?` },
+
+  { keywords: ['cell', 'cells', 'cell structure', 'cell membrane', 'nucleus', 'organelle'], answer: `## Cell Biology — The Basic Unit of Life\n\nAll living things are made of **cells** — the smallest units that can carry out life processes.\n\n### Cell Theory\n1. All living organisms are made of cells\n2. Cells are the basic unit of life\n3. All cells come from pre-existing cells\n\n### Plant vs Animal Cells\n| Feature | Plant Cell | Animal Cell |\n|---------|-----------|-------------|\n| Cell wall | Yes (cellulose) | No |\n| Chloroplasts | Yes (for photosynthesis) | No |\n| Large vacuole | Yes (central) | Small or none |\n| Shape | Fixed, rectangular | Round, irregular |\n\n### Key Organelles\n| Organelle | Function |\n|-----------|----------|\n| **Nucleus** | Contains DNA, controls cell activities |\n| **Mitochondria** | Makes energy (ATP) — the powerhouse |\n| **Ribosomes** | Makes proteins |\n| **Endoplasmic Reticulum** | Transports materials |\n| **Golgi apparatus** | Packages and ships proteins |\n| **Cell membrane** | Controls what enters/leaves |\n| **Cytoplasm** | Jelly-like fluid filling the cell |\n\n### How Cells Get Energy\n- **Mitochondria** perform cellular respiration:\n- C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + ATP (energy)\n- This is why we breathe oxygen and eat food!\n\n### Cell Division\n- **Mitosis** — Makes 2 identical cells (growth/repair)\n- **Meiosis** — Makes 4 unique cells (for reproduction)\n\nWant to learn about DNA, genetics, or specific organelles?` },
+
+  { keywords: ['water cycle', 'evaporation', 'condensation', 'precipitation', 'rain'], answer: `## The Water Cycle\n\nThe **water cycle** (hydrological cycle) is the continuous movement of water between the Earth's surface and the atmosphere.\n\n### The 4 Main Stages\n\n| Stage | What Happens | Where |\n|-------|-------------|-------|\n| **1. Evaporation** | Water heated by sun turns from liquid to vapor | Oceans, lakes, rivers |\n| **2. Condensation** | Water vapor cools and forms clouds | Atmosphere |\n| **3. Precipitation** | Water falls as rain, snow, sleet, or hail | Sky → Ground |\n| **4. Collection** | Water gathers in oceans, lakes, rivers, or underground | Earth's surface |\n\n### Additional Processes\n- **Transpiration** — Plants release water vapor from leaves\n- **Infiltration** — Water seeps into the ground\n- **Runoff** — Water flows over land into rivers and oceans\n- **Sublimation** — Ice/snow turns directly into vapor (bypasses liquid)\n\n### Why It Matters\n- Provides fresh water for all living things\n- Shapes landscapes through erosion and deposition\n- Drives weather patterns and climate\n- Essential for agriculture and ecosystems\n\n### Key Facts\n- 97% of Earth's water is in oceans (salt water)\n- Only 3% is fresh water (most is frozen in ice caps)\n- A water molecule spends an average of 9 days in the atmosphere\n\nWant to learn about weather patterns or climate change?` },
+
+  { keywords: ['ecosystem', 'ecology', 'food chain', 'food web', 'habitat', 'biome'], answer: `## Ecosystems & Ecology\n\nAn **ecosystem** is a community of living organisms interacting with their physical environment.\n\n### Ecosystem Components\n| Living (Biotic) | Non-Living (Abiotic) |\n|-----------------|---------------------|\n| Plants (producers) | Sunlight |\n| Animals (consumers) | Water |\n| Bacteria/Fungi (decomposers) | Soil, temperature, air |\n\n### Food Chain\n\`\`\`\nSun → Grass → Rabbit → Fox → Eagle\n(Producer) (1° consumer) (2° consumer) (3° consumer)\n\`\`\`\n\n### Trophic Levels\n| Level | Name | Energy |\n|-------|------|--------|\n| 1 | Producer (plants) | 100% |\n| 2 | Primary consumer (herbivore) | 10% |\n| 3 | Secondary consumer (carnivore) | 1% |\n| 4 | Tertiary consumer (top predator) | 0.1% |\n\n> Only ~10% of energy transfers to the next level (10% rule)\n\n### Types of Ecosystems\n| Terrestrial | Aquatic |\n|-------------|----------|\n| Forest, Desert | Freshwater, Marine |\n| Grassland, Tundra | Coral reef, Wetland |\n\n### Human Impact\n- Deforestation, pollution, climate change\n- Loss of biodiversity\n- Conservation and sustainability are essential\n\nWant to learn about a specific ecosystem or environmental issue?` },
+
+  { keywords: ['solar system', 'planet', 'earth', 'sun', 'moon', 'orbit', 'star'], answer: `## The Solar System\n\nOur **solar system** consists of the Sun and everything that orbits it — 8 planets, dwarf planets, moons, asteroids, and comets.\n\n### The Sun\n- A medium-sized star (yellow dwarf)\n- 4.6 billion years old\n- Contains 99.86% of the solar system's mass\n- Surface temperature: ~5,500°C\n\n### The 8 Planets\n| Planet | Type | Distance from Sun | Notable Feature |\n|--------|------|-------------------|-----------------|\n| **Mercury** | Rocky | Closest | Smallest, extreme temperatures |\n| **Venus** | Rocky | 2nd | Hottest (greenhouse effect) |\n| **Earth** | Rocky | 3rd | Only planet with life |\n| **Mars** | Rocky | 4th | "Red planet" (iron oxide) |\n| **Jupiter** | Gas giant | 5th | Largest, Great Red Spot |\n| **Saturn** | Gas giant | 6th | Famous rings |\n| **Uranus** | Ice giant | 7th | Rotates on its side |\n| **Neptune** | Ice giant | 8th | Strongest winds |\n\n### Mnemonic\n> **My Very Eager Mother Just Served Us Noodles** (Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune)\n\n### Key Concepts\n- **Orbit:** Path a planet follows around the Sun\n- **Axis tilt:** Earth's 23.5° tilt causes seasons\n- **Rotation:** Day/night cycle (24 hours)\n- **Revolution:** One full orbit = 1 year\n\nWant to learn about a specific planet or space topic?` },
+
+  { keywords: ['friction', 'velocity', 'acceleration', 'momentum', 'inertia', 'newton', 'force', 'motion', 'physics', 'energy', 'work', 'power', 'gravity', 'weight'], answer: `## Newton's Laws of Motion\n\n**Sir Isaac Newton** formulated three fundamental laws that describe how objects move.\n\n### First Law (Inertia)\n> An object at rest stays at rest, and an object in motion stays in motion at constant velocity, **unless acted upon by an external force**.\n\nExample: A book on a table stays still until you push it.\n\n### Second Law (F = ma)\n> **Force = Mass × Acceleration**\n\nThe more force you apply, the faster it accelerates. The heavier the object, the more force needed.\n\nExample: To accelerate a 10 kg box at 2 m/s²:\nF = 10 × 2 = 20 Newtons\n\n### Third Law (Action-Reaction)\n> For every action, there is an **equal and opposite reaction**.\n\nExample: When you push against a wall, the wall pushes back with equal force.\n\n### Key Concepts\n- **Friction:** Force that opposes motion (slows things down)\n- **Momentum:** p = mv (mass × velocity) — conserved in collisions\n- **Kinetic Energy:** KE = ½mv² (energy of motion)\n- **Potential Energy:** PE = mgh (energy stored by position)\n\nWant me to solve some physics problems or explain energy and momentum?` },
+
+  { keywords: ['supply', 'demand', 'economics', 'market', 'price', 'inflation', 'gdp', 'trade', 'microeconomics', 'macroeconomics'], answer: `## Economics — Supply & Demand\n\n**Economics** studies how people, businesses, and governments make choices about allocating scarce resources.\n\n### Supply & Demand\n- **Demand:** How much consumers want (higher price = less demand)\n- **Supply:** How much producers offer (higher price = more supply)\n- **Equilibrium:** Where supply meets demand = market price\n\n### Key Concepts\n| Concept | Definition |\n|---------|------------|\n| **Inflation** | General increase in prices over time |\n| **GDP** | Total value of goods/services produced |\n| **Opportunity Cost** | The next best alternative given up |\n| **Scarcity** | Limited resources vs unlimited wants |\n| **Unemployment** | % of labor force without work |\n\n### Supply & Demand Curve\n\`\`\`\nPrice\n  ↑  Supply ↗\n  |       ╱\n  |  ────X────  ← Equilibrium\n  |     ╱\n  |   Demand ↘\n  └──────────→ Quantity\n\`\`\`\n\n### Types of Economic Systems\n| System | Description |\n|--------|-------------|\n| Market | Private ownership, competition |\n| Command | Government controls everything |\n| Mixed | Combination of both (most countries) |\n\nWant to learn about inflation, trade, or Nigerian economics?` },
+
+  { keywords: ['essay', 'writing', 'composition', 'creative writing', 'paragraph', 'thesis', 'narrative', 'poetry', 'literature', 'drama', 'novel', 'figurative language', 'metaphor', 'simile', 'alliteration'], answer: `## Essay Writing Guide\n\nAn **essay** is a structured piece of writing that presents an argument, explains a topic, or tells a story.\n\n### Essay Structure\n\`\`\`\n1. INTRODUCTION (1 paragraph)\n   - Hook (attention-grabber)\n   - Background context\n   - Thesis statement (main argument)\n\n2. BODY (3+ paragraphs)\n   - Topic sentence\n   - Evidence/examples\n   - Analysis\n   - Transition to next point\n\n3. CONCLUSION (1 paragraph)\n   - Restate thesis (different words)\n   - Summarize key points\n   - Final thought / call to action\n\`\`\`\n\n### Types of Essays\n| Type | Purpose |\n|------|--------|\n| Narrative | Tell a story |\n| Descriptive | Paint a picture with words |\n| Expository | Explain a topic |\n| Argumentative | Persuade with evidence |\n\n### Writing Tips\n- **Plan first** — Outline your points before writing\n- **Clear thesis** — State your main argument in the introduction\n- **One idea per paragraph** — Each paragraph = one supporting point\n- **Use evidence** — Facts, quotes, examples to support claims\n- **Proofread** — Check grammar, spelling, and flow\n\n### Transition Words\n- Addition: furthermore, moreover, also\n- Contrast: however, but, on the other hand\n- Cause: therefore, consequently, as a result\n- Example: for instance, specifically, to illustrate\n\nWant me to help you write or review an essay on a specific topic?` },
+
+  { keywords: ['weather', 'climate', 'temperature', 'atmosphere', 'cloud', 'wind', 'storm', 'rain', 'thunderstorm', 'hurricane', 'tornado'], answer: `## Weather & Climate\n\n**Weather** is the short-term state of the atmosphere. **Climate** is the average weather over 30+ years.\n\n### What Causes Weather?\n- The **Sun** heats Earth unevenly (equator = hotter, poles = colder)\n- **Warm air rises**, cool air sinks → creates wind and pressure differences\n- **Water evaporates** from oceans → forms clouds → falls as rain\n\n### Types of Clouds\n| Cloud Type | Altitude | Weather |\n|-----------|----------|----------|\n| Cirrus | High (6-12km) | Fair weather |\n| Cumulus | Low-mid | Fair or rain |\n| Cumulonimbus | Low-top (12km+) | Thunderstorms |\n| Stratus | Low (0-2km) | Overcast, drizzle |\n\n### Measuring Weather\n| Instrument | Measures |\n|------------|----------|\n| Thermometer | Temperature |\n| Barometer | Air pressure |\n| Anemometer | Wind speed |\n| Rain gauge | Rainfall |\n\n### Severe Weather\n- **Thunderstorm:** Lightning, thunder, heavy rain, hail\n- **Tornado:** Violent rotating column of air\n- **Hurricane:** Massive tropical storm with 120+ km/h winds\n\n### Climate Zones\n| Zone | Temperature | Example |\n|------|-------------|----------|\n| Tropical | Hot & wet year-round | Amazon, Congo |\n| Arid | Very dry | Sahara, Kalahari |\n| Temperate | Moderate seasons | UK, Japan |\n| Polar | Very cold | Antarctica, Arctic |\n\nWant to learn about climate change or the water cycle?` },
+
+  { keywords: ['chemical reaction', 'element', 'compound', 'mixture', 'periodic table', 'bond', 'ionic', 'covalent', 'acid', 'base', 'ph', 'solution', 'reactant', 'product'], answer: `## Chemical Reactions\n\nA **chemical reaction** occurs when substances (reactants) are transformed into new substances (products).\n\n### Signs of a Chemical Reaction\n- Color change\n- Gas produced (bubbles)\n- Temperature change\n- Precipitate (solid) formed\n- Light or flame produced\n\n### Types of Reactions\n| Type | Example |\n|------|---------|\n| **Combustion** | CH₄ + 2O₂ → CO₂ + 2H₂O (burning) |\n| **Decomposition** | 2H₂O → 2H₂ + O₂ (breakdown) |\n| **Synthesis** | 2Na + Cl₂ → 2NaCl (combining) |\n| **Single replacement** | Zn + CuSO₄ → ZnSO₄ + Cu |\n| **Double replacement** | NaCl + AgNO₃ → AgCl + NaNO₃ |\n\n### Balancing Equations\n- Same number of each atom on both sides\n- Change coefficients (numbers in front), NOT subscripts\n\n### The Periodic Table\n- **118 elements** arranged by atomic number\n- **Groups (columns):** Similar properties\n- **Periods (rows):** Same number of electron shells\n\n### Acids & Bases\n| Property | Acid | Base |\n|----------|------|------|\n| pH | Below 7 | Above 7 |\n| Taste | Sour (lemon) | Bitter (soap) |\n| Example | HCl, H₂SO₄ | NaOH, Ca(OH)₂ |\n\n> pH 7 = Neutral (pure water)\n\nWant to learn about specific reactions or the periodic table?` },
+
+  { keywords: ['democracy', 'government', 'constitution', 'nigerian government', 'political', 'election', 'human right', 'law', 'judiciary', 'legislature', 'executive'], answer: `## Democracy & Government\n\n**Democracy** is a system of government where power is held by the **people**, either directly or through elected representatives.\n\n### Types of Democracy\n- **Direct democracy** — Citizens vote on laws themselves\n- **Representative democracy** — Citizens elect leaders to make laws\n- **Presidential system** — President is head of state AND government (e.g., USA, Nigeria)\n- **Parliamentary system** — PM is head of government, separate head of state (e.g., UK)\n\n### Nigerian Government Structure\nNigeria operates a **federal presidential republic** with three branches:\n\n**1. Executive:**\n- President (head of state and government)\n- Vice President\n- Federal and State Ministers/Commissioners\n\n**2. Legislature:**\n- National Assembly (Senate + House of Representatives)\n- State Houses of Assembly\n\n**3. Judiciary:**\n- Supreme Court → Court of Appeal → High Courts\n- Independent of the other branches\n\n### Key Principles\n- **Separation of powers** — No single branch controls everything\n- **Rule of law** — Everyone is subject to the law\n- **Fundamental rights** — Guaranteed by the constitution\n- **Federalism** — Power shared between federal and state governments\n\n### Nigerian Independence\n- Gained independence: October 1, 1960\n- Constitution: 1999 Constitution (as amended)\n- 36 states + FCT Abuja\n\nWant to learn about a specific aspect of Nigerian or world government?` },
+
+  { keywords: ['electricity', 'electric', 'current', 'voltage', 'resistance', 'circuit', 'battery', 'ohm', 'power', 'conductor', 'insulator'], answer: `## Electricity\n\n**Electricity** is the flow of electric charge (electrons) through a conductor.\n\n### Two Types\n| Type | Description | Example |\n|------|-------------|---------|\n| **Static** | Stationary charge on surface | Balloon sticking to wall |\n| **Current** | Flowing charge through a wire | Powering a light bulb |\n\n### Key Concepts\n| Concept | Symbol | Unit | Formula |\n|---------|--------|------|---------|\n| Voltage | V | Volts (V) | Pushes electrons |\n| Current | I | Amperes (A) | Flow of electrons |\n| Resistance | R | Ohms (Ω) | Opposes flow |\n\n### Ohm's Law\n\`\`\`\nV = I × R\nVoltage = Current × Resistance\n\`\`\`\n\n### Series vs Parallel Circuits\n| Feature | Series | Parallel |\n|---------|--------|----------|\n| Path | One path | Multiple paths |\n| If one bulb breaks | All go out | Others stay on |\n| Voltage | Shared among components | Same across each |\n| Current | Same through all | Divided among branches |\n\n### Safety\n- Never touch exposed wires\n- Water conducts electricity — keep dry\n- Use circuit breakers and fuses\n- High voltage can be lethal\n\n### Conductors vs Insulators\n| Conductors (allow flow) | Insulators (block flow) |\n|------------------------|----------------------|\n| Copper, aluminum, gold | Rubber, plastic, glass |\n| Human body (wet) | Dry wood, air |\n\nWant to learn about electronics, circuits, or magnetism?` },
+
+  { keywords: ['study', 'study tips', 'revision', 'exam preparation', 'time management', 'pomodoro', 'active recall', 'spaced repetition', 'note taking', 'study habits', 'learning'], answer: `## Effective Study Strategies\n\n### Active Recall\n1. Read a section of your material\n2. Close the book and write down everything you remember\n3. Open the book and fill in gaps\n4. Repeat until you can recall everything perfectly\n\n### Spaced Repetition Schedule\n- **Day 1:** Learn new material\n- **Day 2:** Review (10 min)\n- **Day 4:** Review (5 min)\n- **Day 7:** Review (5 min)\n- **Day 14:** Final review (3 min)\n\n### Pomodoro Technique\n1. Study for 25 minutes (one "pomodoro")\n2. Take a 5-minute break\n3. After 4 pomodoros, take a 15-30 minute break\n\n### Feynman Technique\n1. Choose a concept\n2. Explain it simply (as if teaching a child)\n3. Identify gaps in your understanding\n4. Go back and fill the gaps\n5. Repeat until you can explain it clearly\n\n### Note-Taking Methods\n| Method | Best For |\n|--------|----------|\n| Cornell | Structured review |\n| Mind Maps | Visual learners |\n| Outline | Sequential topics |\n| Flashcards | Key terms & definitions |\n\n### Tips\n- Study in short, focused sessions\n- Get enough sleep (memory consolidation)\n- Exercise regularly (improves focus)\n- Eat well and stay hydrated\n- Study in a quiet, organized space\n\nNeed a personalized study plan?` },
+
+  // ===== INTERNET / TECHNOLOGY =====
+  { keywords: ['internet', 'web', 'www', 'browser', 'http', 'url', 'website', 'online', 'wifi', 'network'], answer: `## How the Internet Works\n\nThe **internet** is a global network of interconnected computers that communicate using standardized protocols.\n\n### Key Concepts\n| Concept | What It Is |\n|---------|-----------|\n| **IP Address** | Unique number assigned to each device (like a postal address) |\n| **DNS** | Translates website names (google.com) into IP addresses |\n| **HTTP/HTTPS** | Rules for transferring web pages (HTTPS = encrypted/secure) |\n| **Router** | Directs data between networks |\n| **Server** | Computer that stores websites and serves them to users |\n| **Client** | Your device (browser) that requests and displays content |\n\n### How a Web Page Loads\n1. You type a URL (e.g., google.com) in your browser\n2. Browser asks DNS: "What IP address is google.com?"\n3. DNS replies: "142.250.80.46"\n4. Browser connects to that IP address via HTTPS\n5. Server sends back HTML, CSS, and JavaScript files\n6. Browser renders (displays) the page\n\n### The Web vs The Internet\n- **Internet** = the physical network of cables, routers, and servers\n- **Web (WWW)** = websites and pages that run ON the internet\n- The internet also carries email, streaming, gaming, etc.\n\n### Fun Fact\n- Over 5 billion people use the internet today\n- The first message sent (1969) was "LO" — the system crashed before they could type "LOGIN"\n\nWant to learn about web development, networking, or cybersecurity?` },
+
+  // ===== HISTORY =====
+  { keywords: ['french revolution', 'napoleon', 'bastille', 'france', 'versailles', 'ancien regime'], answer: `## The French Revolution (1789-1799)\n\nThe **French Revolution** was a period of radical political and social change in France that overthrew the monarchy and established a republic.\n\n### Causes\n| Cause | Explanation |\n|-------|-------------|\n| **Social inequality** | Three Estates: Clergy & Nobility (tax-exempt) vs Commoners (heavily taxed) |\n| **Economic crisis** | France was bankrupt from funding the American Revolution |\n| **Food shortage** | Bad harvests led to bread prices skyrocketing |\n| **Enlightenment ideas** | Rousseau, Voltaire inspired liberty and equality |\n| **Weak leadership** | King Louis XVI was indecisive |\n\n### Key Events\n| Date | Event |\n|------|-------|\n| July 14, 1789 | **Storming of the Bastille** — revolution begins |\n| Aug 26, 1789 | **Declaration of Rights of Man** — "Men are born free and equal" |\n| 1792 | **Monarchy abolished** — France declared a Republic |\n| Jan 21, 1793 | **King Louis XVI executed** |\n| 1793-94 | **Reign of Terror** — Robespierre executes thousands |\n| Nov 1799 | **Napoleon Bonaparte** seizes power |\n\n### Key Figures\n| Person | Role |\n|--------|------|\n| **Louis XVI** | King of France, executed |\n| **Marie Antoinette** | Queen, hated for extravagance |\n| **Robespierre** | Led the Reign of Terror |\n| **Napoleon Bonaparte** | Military general, became Emperor |\n\n### Results\n- End of absolute monarchy in France\n- Spread of democratic ideas across Europe\n- Rise of nationalism\n- Inspired later revolutions (Haiti, Latin America)\n\nWant to learn about Napoleon, or compare with other revolutions?` },
+
+  { keywords: ['civil war', 'slavery', 'abolition', 'lincoln', 'confederate', 'union'], answer: `## The American Civil War (1861-1865)\n\nThe **American Civil War** was fought between the **Northern states (Union)** and **Southern states (Confederacy)** primarily over the issue of slavery.\n\n### Main Causes\n| Cause | Detail |\n|-------|--------|\n| **Slavery** | Southern economy depended on enslaved labor; North opposed it |\n| **States' rights** | South wanted states to decide slavery locally |\n| **Economic differences** | North = industrial; South = agricultural |\n| **Abolition movement** | Growing anti-slavery sentiment in the North |\n\n### Key Facts\n- Duration: April 12, 1861 - May 26, 1865\n- Casualties: ~620,000 soldiers died (more than any other US war)\n- **Abraham Lincoln** led the Union; **Jefferson Davis** led the Confederacy\n- The Union won, preserving the United States and ending slavery\n\n### Important Events\n| Date | Event |\n|------|-------|\n| Jan 1, 1863 | **Emancipation Proclamation** — freed slaves in Confederate states |\n| July 1-3, 1863 | **Battle of Gettysburg** — turning point of the war |\n| April 9, 1865 | **Lee surrenders** to Grant at Appomattox Court House |\n\n### Legacy\n- Slavery abolished (13th Amendment, 1865)\n- Reconstruction era followed (1865-1877)\n- Civil rights issues continued for another century\n\nWant to learn about specific battles, Lincoln, or the civil rights movement?` },
+
+  { keywords: ['second world war', 'world war 2', 'ww2', 'wwii', 'hitler', 'nazi', 'holocaust', 'allies'], answer: `## World War II (1939-1945)\n\n**World War II** was the deadliest conflict in human history, involving most of the world's nations in two opposing alliances.\n\n### The Two Sides\n| Allies | Axis |\n|--------|------|\n| UK, USA, Soviet Union, France, China | Germany, Italy, Japan |\n\n### Main Causes\n| Cause | Detail |\n|-------|--------|\n| **Treaty of Versailles** | Harsh penalties on Germany after WWI |\n| **Rise of Hitler** | Nazi party promoted extreme nationalism and racism |\n| **Appeasement** | Allied nations let Hitler expand without resistance |\n| **Japanese expansion** | Japan invaded China and sought Pacific dominance |\n\n### Key Events\n| Date | Event |\n|------|-------|\n| Sep 1, 1939 | Germany invades Poland — war begins |\n| Jun 1940 | France falls to Germany |\n| Dec 7, 1941 | **Pearl Harbor** — Japan attacks US, America enters war |\n| Jun 1944 | **D-Day** — Allied invasion of Normandy, France |\n| May 8, 1945 | **Germany surrenders** (V-E Day) |\n| Aug 1945 | **Atomic bombs** on Hiroshima and Nagasaki |\n| Sep 2, 1945 | **Japan surrenders** — war ends |\n\n### The Holocaust\n- Nazi Germany systematically murdered ~6 million Jews\n- Also targeted Roma, disabled people, LGBTQ+ individuals, and others\n- One of history's worst genocides\n\n### Aftermath\n- **United Nations** established (1945) to prevent future wars\n- **Cold War** began between USA and Soviet Union\n- Decolonization movements across Asia and Africa\n- Nuremberg Trials — war criminals prosecuted\n\n### Casualties\n- Total: ~70-85 million people died\n- ~60% were civilians\n\nWant to learn about specific battles, the Holocaust, or the Cold War?` },
 
 ];
 
@@ -225,8 +262,8 @@ function findKnowledgeAnswer(query) {
       }
     }
   }
-  // Only return a match if the keyword is at least 5 chars long (prevents 'node' matching 'noun')
-  if (bestMatch && bestScore >= 5) return bestMatch.answer;
+  // Only return a match if the keyword is at least 4 chars long
+  if (bestMatch && bestScore >= 4) return bestMatch.answer;
 
   // Fuzzy match: only for longer words (>4 chars) with strict score threshold
   const queryWords = q.split(/\s+/).filter(w => w.length > 3);
@@ -309,6 +346,21 @@ function simulateAIResponse(promptType, content, chatHistory = [], studentInfo =
     return cleaned.replace(/\s+/g, ' ').trim();
   }
 
+  // Helper: extract the core topic from a question like "How does the heart pump blood?"
+  function extractCoreTopic(text) {
+    let q = text.toLowerCase().replace(/[?!.,;:'"]/g, ' ').trim();
+    // Remove common question starters
+    q = q.replace(/^(what|how|why|when|where|who|which|can you|could you|would you|please|explain|teach me|tell me about|describe|define|what is|what are|how does|how do|how to|is|are|do|does|did|has|have|should|would|could|can)\s+/i, '').trim();
+    // Remove filler verbs and question words from the beginning
+    q = q.replace(/^(the|a|an|about|of|on|in|for|to|that|this|it|causes|cause|make|makes|do|does|are|is|was|were|has|have|had)\s+/i, '').trim();
+    // Remove trailing question words
+    q = q.replace(/\s+(work|works|happen|happens|mean|means|do|does|it|that|this|really|actually|exactly|the|like|from|about|going|there)\s*$/i, '').trim();
+    // Remove "the" prefix
+    q = q.replace(/^the\s+/i, '').trim();
+    if (q.length >= 2) return q;
+    return null;
+  }
+
   if (promptType === 'chat') {
     let q = content.toLowerCase().trim();
 
@@ -357,9 +409,13 @@ function simulateAIResponse(promptType, content, chatHistory = [], studentInfo =
       let topic = teachMatch[1].replace(/[?!.,]+$/, '').trim();
       topic = stripFillers(topic);
 
+      // Use smart extraction to get the core topic
+      const coreTopic = extractCoreTopic(topic);
+      if (coreTopic && coreTopic.length >= 2) topic = coreTopic;
+
       // If topic is too short or just filler, try reply context
       if (topic.length < 3 && replyTopic) {
-        topic = replyTopic;
+        topic = extractCoreTopic(replyTopic) || replyTopic;
       }
 
       // If still too short, try from chat history
@@ -367,7 +423,7 @@ function simulateAIResponse(promptType, content, chatHistory = [], studentInfo =
         const reversedHistory = [...(chatHistory || [])].reverse();
         for (const msg of reversedHistory) {
           if (msg.role === 'user' && msg.content && msg.content.length > 3) {
-            topic = msg.content.replace(/[?!.,;:'"<>]/g, ' ').trim();
+            topic = extractCoreTopic(msg.content) || msg.content.replace(/[?!.,;:'"<>]/g, ' ').trim();
             break;
           }
         }
@@ -393,7 +449,9 @@ function simulateAIResponse(promptType, content, chatHistory = [], studentInfo =
     if (helpMatch) {
       let topic = helpMatch[1].replace(/[?!.,]+$/, '').trim();
       topic = stripFillers(topic);
-      if (topic.length < 3 && replyTopic) topic = replyTopic;
+      const coreTopic = extractCoreTopic(topic);
+      if (coreTopic && coreTopic.length >= 2) topic = coreTopic;
+      if (topic.length < 3 && replyTopic) topic = extractCoreTopic(replyTopic) || replyTopic;
       const topicAnswer = findKnowledgeAnswer(topic);
       if (topicAnswer) return topicAnswer + studentTailor;
       const topicTitle = topic.charAt(0).toUpperCase() + topic.slice(1);
@@ -405,7 +463,9 @@ function simulateAIResponse(promptType, content, chatHistory = [], studentInfo =
     if (genMatch) {
       let topic = genMatch[1].replace(/[?!.,]+$/, '').trim();
       topic = stripFillers(topic);
-      if (topic.length < 3 && replyTopic) topic = replyTopic;
+      const coreTopic = extractCoreTopic(topic);
+      if (coreTopic && coreTopic.length >= 2) topic = coreTopic;
+      if (topic.length < 3 && replyTopic) topic = extractCoreTopic(replyTopic) || replyTopic;
       const topicAnswer = findKnowledgeAnswer(topic);
       if (topicAnswer) return topicAnswer + studentTailor;
       return generateDetailedAnswer(topic.charAt(0).toUpperCase() + topic.slice(1), classLevel, course, stream);
@@ -414,7 +474,10 @@ function simulateAIResponse(promptType, content, chatHistory = [], studentInfo =
     // Pattern: question words — "why", "when", "where", "who", "which"
     const questionMatch = q.match(/^(?:why|when|where|who|which|can|could|would|should|is|are|do|does|did|has|have)\s+(.+)/);
     if (questionMatch) {
-      const topic = questionMatch[1].replace(/[?!.,]+$/, '').trim();
+      let topic = questionMatch[1].replace(/[?!.,]+$/, '').trim();
+      const coreTopic = extractCoreTopic(topic);
+      if (coreTopic && coreTopic.length >= 2) topic = coreTopic;
+
       let topicAnswer = findKnowledgeAnswer(content);
       if (!topicAnswer) topicAnswer = findKnowledgeAnswer(topic);
       if (topicAnswer) return topicAnswer + studentTailor;
@@ -423,7 +486,13 @@ function simulateAIResponse(promptType, content, chatHistory = [], studentInfo =
         topicAnswer = findKnowledgeAnswer(replyTopic);
         if (topicAnswer) return `## ${topic.charAt(0).toUpperCase() + topic.slice(1)}\n\n${topicAnswer}${studentTailor}`;
       }
-      return generateDetailedAnswer(content, classLevel, course, stream);
+      // Try each keyword from the topic
+      const topicWords = topic.split(/\s+/).filter(w => w.length > 3);
+      for (const kw of topicWords) {
+        const kwAnswer = findKnowledgeAnswer(kw);
+        if (kwAnswer) return kwAnswer + studentTailor;
+      }
+      return generateDetailedAnswer(topic, classLevel, course, stream);
     }
 
     // Pattern: "study" / "revise" / "practice" / "quiz"
@@ -475,7 +544,7 @@ function simulateAIResponse(promptType, content, chatHistory = [], studentInfo =
 
     // Last resort: generate a helpful topic-specific answer using all available context
     const topicSource = replyTopic || content;
-    const topicFromQuestion = topicSource.replace(/^(hi|hello|hey|can you|please|i want to|i need to|help me|teach me|explain|what is|what are|how to|how does|how do|tell me about|define|describe)\s*/i, '').replace(/[?!.,;:'"<>]/g, ' ').trim();
+    const topicFromQuestion = extractCoreTopic(topicSource) || topicSource.replace(/^(hi|hello|hey|can you|please|i want to|i need to|help me|teach me|explain|what is|what are|how to|how does|how do|tell me about|define|describe)\s*/i, '').replace(/[?!.,;:'"<>]/g, ' ').trim();
     if (topicFromQuestion.length > 2) {
       return generateDetailedAnswer(topicFromQuestion.charAt(0).toUpperCase() + topicFromQuestion.slice(1), classLevel, course, stream);
     }
@@ -549,6 +618,67 @@ function simulateAIResponse(promptType, content, chatHistory = [], studentInfo =
     });
 
     return cards.slice(0, 7);
+  }
+
+  if (promptType === 'generate-quiz') {
+    const words = content.split(/\s+/).filter(w => w.length > 4);
+    const keyTerms = [...new Set(words.slice(0, 8))];
+    const title = content.split('\n')[0].replace(/[#*_-]/g, '').trim().substring(0, 50) || content.substring(0, 50);
+
+    // Try to find relevant knowledge base entries
+    const kbAnswer = findKnowledgeAnswer(content);
+
+    const quiz = [];
+
+    // Generate quiz questions from key terms or knowledge base
+    for (const term of keyTerms.slice(0, 5)) {
+      const cleanTerm = term.replace(/[#*_-]/g, '');
+      quiz.push({
+        question: `What best describes "${cleanTerm}" in the context of ${title}?`,
+        options: {
+          A: `${cleanTerm} is a key concept that is important to understand`,
+          B: `${cleanTerm} is unrelated to the topic`,
+          C: `${cleanTerm} is only used in advanced topics`,
+          D: `${cleanTerm} is a minor detail that can be ignored`
+        },
+        correct: 'A',
+        explanation: `${cleanTerm} is an important concept in this topic. Review your study material for the specific definition and context.`
+      });
+    }
+
+    // Add concept-based questions
+    if (kbAnswer) {
+      const sentences = kbAnswer.split(/[.!?\n]+/).filter(s => s.trim().length > 20).slice(0, 3);
+      for (const sentence of sentences) {
+        const cleanSentence = sentence.replace(/[#*_-]/g, '').trim().substring(0, 100);
+        quiz.push({
+          question: `Which statement is correct about this topic?`,
+          options: {
+            A: cleanSentence,
+            B: 'This topic has no practical applications',
+            C: 'This topic is not studied in academic settings',
+            D: 'This topic was discovered in the 21st century'
+          },
+          correct: 'A',
+          explanation: `Based on the study material: ${cleanSentence}`
+        });
+      }
+    }
+
+    // Add a general comprehension question
+    quiz.push({
+      question: `What is the main topic or theme of "${title}"?`,
+      options: {
+        A: `It covers important concepts related to ${title}`,
+        B: `It is about cooking recipes`,
+        C: `It discusses weather patterns`,
+        D: `It explains how to play sports`
+      },
+      correct: 'A',
+      explanation: `The main topic is "${title}". Review your notes for the key concepts and principles.`
+    });
+
+    return quiz.slice(0, 5);
   }
 
   return 'I can help you with that! Could you provide more details about what specifically you\'d like to know?';

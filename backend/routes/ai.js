@@ -3,6 +3,7 @@ import multer from 'multer';
 import { VM } from 'vm2';
 import { GEMINI_MODEL, GEMINI_URL, GEMINI_KEY, GEMINI_STREAM_URL, SYSTEM_INSTRUCTION } from '../config/gemini.js';
 import { buildStudentContext } from '../services/studentContext.js';
+import { simulateAIResponse } from '../services/knowledgeBase.js';
 
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
@@ -224,8 +225,20 @@ router.post('/chat', async (req, res) => {
     return res.end();
   } catch (err) {
     console.error('[Chat Error]', err.message);
+
+    // If Gemini fails (rate limit, quota, etc.), fall back to the built-in knowledge base
+    if (err.message.includes('429') || err.message.includes('quota') || err.message.includes('RESOURCE_EXHAUSTED')) {
+      try {
+        const kbReply = simulateAIResponse('chat', message, history || [], { classLevel, course, stream, department });
+        res.write(`data: ${JSON.stringify({ type: 'done', reply: kbReply, isSimulated: true })}\n\n`);
+        return res.end();
+      } catch (kbErr) {
+        console.error('[Knowledge Base Fallback Error]', kbErr.message);
+      }
+    }
+
     const userMessage = err.message.includes('429')
-      ? '⚠️ The AI is currently overloaded (rate limit reached). Please wait a moment and try again.'
+      ? '⚠️ The AI is currently overloaded (rate limit reached). Using built-in knowledge engine.'
       : `⚠️ AI error: ${err.message}`;
     res.write(`data: ${JSON.stringify({ type: 'error', error: userMessage })}\n\n`);
     return res.end();
@@ -264,8 +277,18 @@ ${content}`;
     res.json({ summary, isSimulated: false });
   } catch (err) {
     console.error('[Summarize Error]', err.message);
+    // Fall back to knowledge base for summarization
+    if (err.message.includes('429') || err.message.includes('quota') || err.message.includes('RESOURCE_EXHAUSTED')) {
+      try {
+        const kbSummary = simulateAIResponse('summarize', content, [], { classLevel, course, stream, department });
+        res.json({ summary: kbSummary, isSimulated: true });
+        return;
+      } catch (kbErr) {
+        console.error('[Summarize KB Fallback Error]', kbErr.message);
+      }
+    }
     const msg = err.message.includes('429')
-      ? '⚠️ AI rate limit reached. Please wait a moment and try again.'
+      ? '⚠️ AI rate limit reached. Using built-in knowledge engine.'
       : `⚠️ AI error: ${err.message}`;
     res.status(503).json({ error: msg });
   }
@@ -309,8 +332,20 @@ ${content}`;
     throw new Error('Invalid flashcard format returned.');
   } catch (err) {
     console.error('[Flashcards Error]', err.message);
+    // Fall back to knowledge base for flashcard generation
+    if (err.message.includes('429') || err.message.includes('quota') || err.message.includes('RESOURCE_EXHAUSTED')) {
+      try {
+        const kbCards = simulateAIResponse('generate-cards', content, [], { classLevel, course, stream, department });
+        if (Array.isArray(kbCards) && kbCards.length > 0) {
+          res.json({ flashcards: kbCards, isSimulated: true });
+          return;
+        }
+      } catch (kbErr) {
+        console.error('[Flashcards KB Fallback Error]', kbErr.message);
+      }
+    }
     const msg = err.message.includes('429')
-      ? '⚠️ AI rate limit reached. Please wait a moment and try again.'
+      ? '⚠️ AI rate limit reached. Using built-in knowledge engine.'
       : `⚠️ AI error: ${err.message}`;
     res.status(503).json({ error: msg });
   }
@@ -363,8 +398,20 @@ Format:
     throw new Error('Invalid quiz format returned.');
   } catch (err) {
     console.error('[Quiz Error]', err.message);
+    // Fall back to knowledge base for quiz generation
+    if (err.message.includes('429') || err.message.includes('quota') || err.message.includes('RESOURCE_EXHAUSTED')) {
+      try {
+        const kbQuiz = simulateAIResponse('generate-quiz', content, [], { classLevel, course, stream, department });
+        if (Array.isArray(kbQuiz) && kbQuiz.length > 0) {
+          res.json({ quiz: kbQuiz.slice(0, numQuestions), isSimulated: true });
+          return;
+        }
+      } catch (kbErr) {
+        console.error('[Quiz KB Fallback Error]', kbErr.message);
+      }
+    }
     const msg = err.message.includes('429')
-      ? '⚠️ AI rate limit reached. Please wait a moment and try again.'
+      ? '⚠️ AI rate limit reached. Using built-in knowledge engine.'
       : `⚠️ AI error: ${err.message}`;
     res.status(503).json({ error: msg });
   }
@@ -402,8 +449,18 @@ One self-test question the student can use to verify understanding.`;
     res.json({ explanation, isSimulated: false });
   } catch (err) {
     console.error('[Explain Error]', err.message);
+    // Fall back to knowledge base for concept explanation
+    if (err.message.includes('429') || err.message.includes('quota') || err.message.includes('RESOURCE_EXHAUSTED')) {
+      try {
+        const kbExplanation = simulateAIResponse('chat', `Explain ${concept}`, [], { classLevel, course, stream, department });
+        res.json({ explanation: kbExplanation, isSimulated: true });
+        return;
+      } catch (kbErr) {
+        console.error('[Explain KB Fallback Error]', kbErr.message);
+      }
+    }
     const msg = err.message.includes('429')
-      ? '⚠️ AI rate limit reached. Please wait a moment and try again.'
+      ? '⚠️ AI rate limit reached. Using built-in knowledge engine.'
       : `⚠️ AI error: ${err.message}`;
     res.status(503).json({ error: msg });
   }

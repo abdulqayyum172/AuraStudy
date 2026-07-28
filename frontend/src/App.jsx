@@ -26,6 +26,7 @@ class ErrorBoundary extends Component {
           <button onClick={() => { this.setState({ hasError: false, error: null }); window.location.reload(); }} style={{ padding: '10px 20px', background: '#7c5cfc', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>
             Reload App
           </button>
+          <pre style={{ marginTop: '20px', fontSize: '0.75rem', color: '#ff6b6b', maxWidth: '600px', textAlign: 'left', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{this.state.error?.toString()}{'\n'}{this.state.error?.stack}</pre>
         </div>
       );
     }
@@ -583,15 +584,6 @@ function App() {
   }, [theme]);
   const toggleTheme = () => setTheme(t => t === 'light' ? 'dark' : 'light');
 
-  // Sync focus preferences from settings to pomodoro custom durations
-  useEffect(() => {
-    setCustomDurations({
-      focus: focusPrefs.focusDuration || 25,
-      shortBreak: focusPrefs.shortBreakDuration || 5,
-      longBreak: focusPrefs.longBreakDuration || 15,
-    });
-  }, [focusPrefs]);
-
   // Learn page state
   const [activeLearnCategory, setActiveLearnCategory] = useState(null);
   const [learnSearch, setLearnSearch] = useState('');
@@ -660,6 +652,15 @@ function App() {
     }
     return 0;
   });
+
+  // Sync focus preferences from settings to pomodoro custom durations
+  useEffect(() => {
+    setCustomDurations({
+      focus: focusPrefs.focusDuration || 25,
+      shortBreak: focusPrefs.shortBreakDuration || 5,
+      longBreak: focusPrefs.longBreakDuration || 15,
+    });
+  }, [focusPrefs]);
 
   // Quiz States
   const [quizInput, setQuizInput] = useState('');

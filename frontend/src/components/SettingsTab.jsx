@@ -30,6 +30,16 @@ export default function SettingsTab({
   const [course, setCourse] = useState('');
   const [saving, setSaving] = useState(false);
 
+  // Notification state
+  const [notificationsEnabled, setNotificationsEnabled] = useState(() => {
+    return localStorage.getItem('aura-notifications-enabled') === 'true';
+  });
+  const [notificationPermission, setNotificationPermission] = useState(() => {
+    return typeof Notification !== 'undefined' ? Notification.permission : 'default';
+  });
+  const [fcmToken, setFcmToken] = useState(null);
+  const [requestingPermission, setRequestingPermission] = useState(false);
+
   // Account state
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -177,6 +187,80 @@ export default function SettingsTab({
       else addToast('Failed to change password: ' + (err.message || 'Unknown error'), 'error');
     } finally {
       setAccountAction(null);
+    }
+  };
+
+  // Notification: request permission and get FCM token
+  const handleRequestNotificationPermission = async () => {
+    setRequestingPermission(true);
+    try {
+      if (typeof Notification === 'undefined') {
+        addToast('Notifications not supported in this browser', 'error');
+        return;
+      }
+
+      const permission = await Notification.requestPermission();
+      setNotificationPermission(permission);
+
+      if (permission === 'granted') {
+        addToast('Notification permission granted!', 'success');
+        
+        // Try to get FCM token using the helper function from firebase.js
+        try {
+          const { requestFCMToken } = await import('../firebase.js');
+          const token = await requestFCMToken();
+          
+          if (token) {
+            setFcmToken(token);
+            console.log('FCM Token:', token);
+            
+            // Save token to backend
+            if (currentUser?.uid) {
+              await fetch(`${API_BASE}/users/${currentUser.uid}/fcm-token`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token }),
+              });
+            }
+            setNotificationsEnabled(true);
+            localStorage.setItem('aura-notifications-enabled', 'true');
+            addToast('Push notifications enabled successfully!', 'success');
+          } else {
+            addToast('Notifications enabled (token generation pending)', 'success');
+          }
+        } catch (err) {
+          console.error('FCM token error:', err);
+          addToast('Notifications enabled (token generation pending)', 'success');
+        }
+      } else if (permission === 'denied') {
+        addToast('Notification permission denied', 'error');
+        setNotificationsEnabled(false);
+        localStorage.setItem('aura-notifications-enabled', 'false');
+      }
+    } catch (err) {
+      console.error('Notification permission error:', err);
+      addToast('Failed to request notification permission', 'error');
+    } finally {
+      setRequestingPermission(false);
+    }
+  };
+
+  // Toggle notifications on/off
+  const handleToggleNotifications = async () => {
+    if (!notificationsEnabled && notificationPermission !== 'granted') {
+      // Need to request permission first
+      handleRequestNotificationPermission();
+      return;
+    }
+
+    const newValue = !notificationsEnabled;
+    setNotificationsEnabled(newValue);
+    localStorage.setItem('aura-notifications-enabled', String(newValue));
+    
+    if (newValue) {
+      addToast('Notifications enabled', 'success');
+    } else {
+      addToast('Notifications disabled', 'success');
     }
   };
 
@@ -362,6 +446,89 @@ export default function SettingsTab({
                   <span className="settings-toggle-knob" />
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Notifications ── */}
+        <div className="settings-card settings-card-animate">
+          <div className="settings-card-header">
+            <div className="settings-card-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              <h3>Notifications</h3>
+            </div>
+            {notificationPermission === 'granted' && (
+              <span className="settings-unsaved-badge" style={{ background: 'var(--success)', color: '#fff' }}>Enabled</span>
+            )}
+          </div>
+          <div className="settings-card-body">
+            <div className="settings-fields">
+              <div className="settings-toggle-row">
+                <div className="settings-toggle-info">
+                  <span className="settings-toggle-label">Push Notifications</span>
+                  <span className="settings-toggle-desc">
+                    {notificationPermission === 'granted' 
+                      ? 'Get reminders for study sessions, breaks, and quizzes'
+                      : notificationPermission === 'denied'
+                      ? 'Notifications blocked. Enable in browser settings.'
+                      : 'Enable notifications for study reminders'}
+                  </span>
+                </div>
+                <button 
+                  className={`settings-toggle ${notificationsEnabled ? 'on' : ''}`} 
+                  onClick={handleToggleNotifications}
+                  disabled={notificationPermission === 'denied'}
+                  style={{ opacity: notificationPermission === 'denied' ? 0.4 : 1 }}
+                >
+                  <span className="settings-toggle-knob" />
+                </button>
+              </div>
+
+              {notificationPermission === 'default' && (
+                <div style={{ marginTop: '16px', padding: '16px', background: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: '8px' }}>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '12px', lineHeight: 1.5 }}>
+                    Allow AuraStudy to send you notifications for study reminders, pomodoro completions, and quiz schedules.
+                  </p>
+                  <button 
+                    className="btn btn-primary" 
+                    onClick={handleRequestNotificationPermission}
+                    disabled={requestingPermission}
+                    style={{ width: '100%' }}
+                  >
+                    {requestingPermission ? (
+                      <>
+                        <span className="settings-saving-spinner" />
+                        Requesting...
+                      </>
+                    ) : (
+                      <>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        Enable Notifications
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
+
+              {notificationPermission === 'denied' && (
+                <div style={{ marginTop: '16px', padding: '16px', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: '8px' }}>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '8px' }}>
+                    <strong style={{ color: 'var(--danger)' }}>Notifications Blocked</strong>
+                  </p>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                    You've blocked notifications for this site. To enable them, click the lock icon in your browser's address bar and allow notifications.
+                  </p>
+                </div>
+              )}
+
+              {notificationPermission === 'granted' && notificationsEnabled && (
+                <div style={{ marginTop: '16px' }}>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--success)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Notifications are active. You'll receive study reminders and updates.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -47,6 +47,46 @@ router.delete('/:uid/profile', async (req, res) => {
   }
 });
 
+// ── POST /:uid/fcm-token ────────────────────────────────────────────
+// Save or update user's FCM token for push notifications
+router.post('/:uid/fcm-token', async (req, res) => {
+  const { token } = req.body;
+  if (!token || typeof token !== 'string') {
+    return res.status(400).json({ error: 'Valid FCM token is required.' });
+  }
+  try {
+    await db.saveFCMToken(req.params.uid, token);
+    res.json({ success: true, message: 'FCM token saved successfully' });
+  } catch (error) {
+    console.error('[FCM Token] Save error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ── DELETE /:uid/fcm-token ──────────────────────────────────────────
+// Remove user's FCM token (when they disable notifications)
+router.delete('/:uid/fcm-token', async (req, res) => {
+  try {
+    await db.deleteFCMToken(req.params.uid);
+    res.json({ success: true, message: 'FCM token removed successfully' });
+  } catch (error) {
+    console.error('[FCM Token] Delete error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ── GET /:uid/fcm-token ─────────────────────────────────────────────
+// Get user's FCM token (for verification/debugging)
+router.get('/:uid/fcm-token', async (req, res) => {
+  try {
+    const token = await db.getFCMToken(req.params.uid);
+    res.json({ token: token || null });
+  } catch (error) {
+    console.error('[FCM Token] Get error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.get('/courses', (req, res) => {
   const { department } = req.query;
   if (department) {

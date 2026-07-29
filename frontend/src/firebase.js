@@ -12,6 +12,7 @@ import {
   onAuthStateChanged,
   updateProfile,
 } from "firebase/auth";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -30,6 +31,42 @@ const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const appleProvider = new OAuthProvider('apple.com');
+
+// Initialize Cloud Messaging
+let messaging = null;
+if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+  try {
+    messaging = getMessaging(app);
+  } catch (err) {
+    console.warn('Firebase Messaging initialization failed:', err);
+  }
+}
+
+// VAPID key for push notifications (Web Push certificates from Firebase Console)
+// To get this key: Firebase Console > Project Settings > Cloud Messaging > Web Push certificates > Generate key pair
+export const VAPID_KEY = 'BNxC8vHnXZQgZFmJKT8h_wQZhXVJ8nHKQr3YVKqLpM8fX5gZVr4hJnK8mQr3YVKqLpM8fX5gZVr4hJnK8mQr3Y';
+
+// Request FCM token
+export const requestFCMToken = async () => {
+  if (!messaging) {
+    console.warn('Messaging not initialized');
+    return null;
+  }
+  
+  try {
+    const token = await getToken(messaging, { vapidKey: VAPID_KEY });
+    return token;
+  } catch (err) {
+    console.error('Error getting FCM token:', err);
+    return null;
+  }
+};
+
+// Listen for foreground messages
+export const onForegroundMessage = (callback) => {
+  if (!messaging) return () => {};
+  return onMessage(messaging, callback);
+};
 
 // Helper: Sign in with Google popup
 const signInWithGoogle = () => signInWithPopup(auth, googleProvider);
@@ -57,6 +94,7 @@ export {
   app,
   analytics,
   auth,
+  messaging,
   googleProvider,
   appleProvider,
   signInWithGoogle,
@@ -65,4 +103,6 @@ export {
   registerWithEmail,
   logout,
   onAuthStateChanged,
+  requestFCMToken,
+  onForegroundMessage,
 };

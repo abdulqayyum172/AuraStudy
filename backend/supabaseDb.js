@@ -309,7 +309,46 @@ class SupabaseDatabase {
     // Delete profile, conversations, and quiz history for this user
     await this.client.from('conversations').delete().eq('uid', uid);
     await this.client.from('quiz_history').delete().eq('uid', uid);
+    await this.client.from('fcm_tokens').delete().eq('uid', uid);
     await this.client.from('profiles').delete().eq('uid', uid);
+  }
+
+  // ── FCM Tokens (Push Notifications) ────────────────────────────────────────
+
+  async saveFCMToken(uid, token) {
+    const { data: existing } = await this.client
+      .from('fcm_tokens').select('*').eq('uid', uid).maybeSingle();
+
+    const now = new Date().toISOString();
+
+    if (!existing) {
+      const row = { uid, token, created_at: now, updated_at: now };
+      const { error } = await this.client.from('fcm_tokens').insert(row);
+      if (error) throw error;
+      return row;
+    }
+
+    const { error } = await this.client
+      .from('fcm_tokens').update({ token, updated_at: now }).eq('uid', uid);
+    if (error) throw error;
+    return { uid, token, updated_at: now };
+  }
+
+  async getFCMToken(uid) {
+    const { data } = await this.client
+      .from('fcm_tokens').select('token').eq('uid', uid).maybeSingle();
+    return data?.token || null;
+  }
+
+  async deleteFCMToken(uid) {
+    await this.client.from('fcm_tokens').delete().eq('uid', uid);
+  }
+
+  async getAllFCMTokens() {
+    // Get all active FCM tokens (for broadcasting notifications)
+    const { data, error } = await this.client.from('fcm_tokens').select('*');
+    if (error) throw error;
+    return data || [];
   }
 
   // ── Quiz History ───────────────────────────────────────────────────────────

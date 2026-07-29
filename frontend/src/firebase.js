@@ -70,13 +70,45 @@ export const onForegroundMessage = (callback) => {
 };
 
 // Helper: Sign in with Google redirect
-const signInWithGoogle = () => signInWithRedirect(auth, googleProvider);
+const signInWithGoogle = async () => {
+  try {
+    await signInWithRedirect(auth, googleProvider);
+  } catch (error) {
+    if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+      console.log('Popup blocked or closed, using redirect flow...');
+    }
+    console.error('Google sign-in error:', error);
+    throw error;
+  }
+};
 
 // Helper: Sign in with Apple redirect
-const signInWithApple = () => signInWithRedirect(auth, appleProvider);
+const signInWithApple = async () => {
+  try {
+    await signInWithRedirect(auth, appleProvider);
+  } catch (error) {
+    if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+      console.log('Popup blocked or closed, using redirect flow...');
+    }
+    console.error('Apple sign-in error:', error);
+    throw error;
+  }
+};
 
 // Helper: Handle redirect result (call on app mount)
-const handleRedirectResult = () => getRedirectResult(auth);
+const handleRedirectResult = async () => {
+  try {
+    const result = await getRedirectResult(auth);
+    return result;
+  } catch (error) {
+    if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+      console.log('Popup blocked/closed during redirect, this is expected in some browsers');
+      return { user: null };
+    }
+    console.error('Redirect result error:', error);
+    throw error;
+  }
+};
 
 // Helper: Email/Password login
 const loginWithEmail = (email, password) =>

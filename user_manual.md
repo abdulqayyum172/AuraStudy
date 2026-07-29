@@ -4,6 +4,63 @@ AuraStudy is an intelligent, integrated educational workspace designed to combin
 
 ---
 
+## 🔔 2.5 Push Notifications
+
+AuraStudy now supports **browser push notifications** to help you stay on track with your learning goals!
+
+### 📱 Key Features:
+
+* **Study Session Reminders**: Get notified before focus sessions start
+* **Pomodoro Completions**: Receive alerts when a study session ends
+* **Break Notifications**: Get notified when break time begins
+* **App Notifications**: In-app toasts for immediate feedback
+* **System Notifications**: Browser desktop/app notifications
+
+### 🔧 How to Enable:
+
+1. **Log in** to your AuraStudy account
+2. Click the **Settings icon** (⚙️) in the top toolbar
+3. Go to the **"Notifications"** tab
+4. Click **"Enable Notifications"**
+5. Click **"Enable"** when prompted for browser permission
+6. Your push notifications are now active!
+
+### 🌟 Benefits:
+
+* **Study Consistency**: Never miss a study session
+* **Productivity Boost**: Micro-reminders help maintain focus
+* **Cross-Device Updates**: Stay notified even when not in your browser
+* **Real-time Alerts**: Instant feedback when important events occur
+
+### ⚙️ Notification Controls:
+
+* **Toggle On/Off**: Switch notifications on or off anytime
+* **Browser Permission Status**: See if notifications are blocked (Firefox/Chrome restrictions)
+* **Clear Indicators**: Visual feedback when notifications are active
+
+### 🔒 Privacy & Security:
+
+* **Permission-Based**: Respects browser and user privacy settings
+* **No Data Exposure**: No personal data shared with third-party services
+* **User Control**: You completely control notification preferences
+* **Backend Storage**: Securely stored FCM tokens on your user profile only
+
+### 📊 Notification Types:
+
+| Event Type | Description | When You Get It |
+|------------|-------------|----------------|
+| **Study Reminder** | 10-minute alert before study session | Set in Focus Preferences |
+| **Pomodoro Start** | Beginning of focus session | When starting timer |
+| **Pomodoro Complete** | Session finished | When timer ends |
+| **Break Start** | Break timer begins | At break start |
+| **Break Complete** | Break time over | At break end |
+
+Push notifications are currently the **#1 feature requested by our users** and will significantly enhance your study consistency and productivity!
+
+---
+
+---
+
 ## 🎯 1. The Problems AuraStudy Solves
 
 Traditional learning methods suffer from several inefficiencies. AuraStudy addresses these directly:

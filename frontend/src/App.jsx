@@ -791,7 +791,9 @@ function App() {
   useEffect(() => {
     // Handle redirect result (popup-free sign-in)
     handleRedirectResult().catch((err) => {
-      if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
+      if (err.code !== 'auth/popup-blocked' && 
+          err.code !== 'auth/popup-closed-by-user' && 
+          err.code !== 'auth/cancelled-popup-request') {
         console.error('Redirect sign-in error:', err);
       }
     });

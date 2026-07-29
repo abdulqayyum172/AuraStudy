@@ -556,11 +556,6 @@ function App() {
   const [authInitialized, setAuthInitialized] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
 
-  // Verification code state (email signup only)
-  const [authPendingVerification, setAuthPendingVerification] = useState(false);
-  const [authVerificationCode, setAuthVerificationCode] = useState('');
-  const [authResendLoading, setAuthResendLoading] = useState(false);
-
   // Toast notifications
   const [toasts, setToasts] = useState([]);
   const addToast = (message, type = 'success', duration = 3000) => {
@@ -924,69 +919,6 @@ function App() {
       setAuthError(friendlyErrors[err.code] || err.message || 'Authentication failed.');
     } finally {
       setAuthLoading(false);
-    }
-  };
-
-  // Step 3: Verify the code, then complete Firebase registration
-  const handleVerifyCode = async (e) => {
-    e.preventDefault();
-    setAuthError('');
-    setAuthLoading(true);
-    try {
-      const res = await fetch(`${API_BASE}/auth/verify-code`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: authEmail.trim(), code: authVerificationCode.trim() }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Verification failed.');
-      }
-
-      // Code verified — now register with Firebase
-      const trimmedEmail = authEmail.trim();
-      const trimmedName = authDisplayName.trim();
-
-      pendingClassLevelRef.current = authClassLevel;
-      pendingStreamRef.current = isSSSLevel(authClassLevel) ? authStream : '';
-      pendingDepartmentRef.current = isHigherInstitutionLevel(authClassLevel) ? authDepartment : '';
-      pendingCourseRef.current = isHigherInstitutionLevel(authClassLevel) ? authCourse : '';
-
-      await registerWithEmail(trimmedEmail, authPassword, trimmedName || undefined);
-
-      setAuthPendingVerification(false);
-      setAuthVerificationCode('');
-      setAuthEmail('');
-      setAuthPassword('');
-      setAuthDisplayName('');
-      setAuthClassLevel('');
-      setAuthStream('');
-      setAuthDepartment('');
-      setAuthCourse('');
-    } catch (err) {
-      console.error(err);
-      setAuthError(err.message || 'Verification failed. Please try again.');
-    } finally {
-      setAuthLoading(false);
-    }
-  };
-
-  const handleResendCode = async () => {
-    setAuthResendLoading(true);
-    setAuthError('');
-    try {
-      const res = await fetch(`${API_BASE}/auth/send-code`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: authEmail.trim() }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to resend code.');
-      addToast('Verification code sent!');
-    } catch (err) {
-      setAuthError(err.message || 'Failed to resend code.');
-    } finally {
-      setAuthResendLoading(false);
     }
   };
 
@@ -2989,36 +2921,12 @@ Stay strictly on "${topic.name}" throughout your entire response.`;
                   <span className="auth-spinner"></span>
                   Please wait...
                 </>
-              ) : authPendingVerification ? (
-                'Verify & Create Account'
               ) : (
-                authMode === 'login' ? 'Access Workspace' : 'Send Code'
+                authMode === 'login' ? 'Access Workspace' : 'Create Account'
               )}
             </button>
 
-            {authPendingVerification && (
-              <p style={{ textAlign: 'center', marginTop: '12px' }}>
-                <button
-                  type="button"
-                  className="auth-link-btn"
-                  onClick={handleResendCode}
-                  disabled={authResendLoading}
-                  style={{ background: 'none', border: 'none', color: '#8b5cf6', cursor: 'pointer', fontSize: '13px', textDecoration: 'underline' }}
-                >
-                  {authResendLoading ? 'Sending...' : 'Resend code'}
-                </button>
-                {' · '}
-                <button
-                  type="button"
-                  onClick={() => { setAuthPendingVerification(false); setAuthVerificationCode(''); setAuthError(''); }}
-                  style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: '13px' }}
-                >
-                  Back
-                </button>
-              </p>
-            )}
-
-            {!authPendingVerification && (
+            {authMode === 'login' || authMode === 'signup' ? (
               <>
             <div className="auth-separator">
               <span className="auth-separator-text">or continue with</span>
@@ -3033,7 +2941,7 @@ Stay strictly on "${topic.name}" throughout your entire response.`;
               </button>
             </div>
               </>
-            )}
+            ) : null}
           </form>
         </div>
       </div>

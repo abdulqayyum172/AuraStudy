@@ -992,10 +992,11 @@ function App() {
       } else if (provider === 'Apple') {
         await signInWithApple();
       }
-    } catch (err) {
-      console.error('Social login error:', err);
-      if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
-        setAuthError(err.message || `${provider} sign-in failed. Please try again.`);
+      } catch (err) {
+        console.error('Social login error:', err);
+        if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request' && err.code !== 'auth/popup-blocked') {
+          setAuthError(err.message || `${provider} sign-in failed. Please try again.`);
+        }
       }
     } finally {
       setAuthLoading(false);

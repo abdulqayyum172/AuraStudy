@@ -5,7 +5,8 @@ import {
   getAuth,
   GoogleAuthProvider,
   OAuthProvider,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
@@ -68,11 +69,14 @@ export const onForegroundMessage = (callback) => {
   return onMessage(messaging, callback);
 };
 
-// Helper: Sign in with Google popup
-const signInWithGoogle = () => signInWithPopup(auth, googleProvider);
+// Helper: Sign in with Google redirect
+const signInWithGoogle = () => signInWithRedirect(auth, googleProvider);
 
-// Helper: Sign in with Apple popup
-const signInWithApple = () => signInWithPopup(auth, appleProvider);
+// Helper: Sign in with Apple redirect
+const signInWithApple = () => signInWithRedirect(auth, appleProvider);
+
+// Helper: Handle redirect result (call on app mount)
+const handleRedirectResult = () => getRedirectResult(auth);
 
 // Helper: Email/Password login
 const loginWithEmail = (email, password) =>
@@ -99,6 +103,7 @@ export {
   appleProvider,
   signInWithGoogle,
   signInWithApple,
+  handleRedirectResult,
   loginWithEmail,
   registerWithEmail,
   logout,

@@ -38,9 +38,13 @@ import {
   onAuthStateChanged,
   signInWithGoogle,
   signInWithApple,
+  handleRedirectResult,
   loginWithEmail,
   registerWithEmail,
   logout,
+  requestFCMToken,
+  onForegroundMessage,
+  messaging,
 } from './firebase.js';
 
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -785,6 +789,12 @@ function App() {
 
   // Firebase Auth state listener — runs once on mount
   useEffect(() => {
+    // Handle redirect result (popup-free sign-in)
+    handleRedirectResult().catch((err) => {
+      if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
+        console.error('Redirect sign-in error:', err);
+      }
+    });
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         // Use pending signup values immediately so the UI has the class
@@ -859,6 +869,25 @@ function App() {
     });
     return () => unsubscribe();
   }, []);
+
+  // Listen for foreground FCM messages
+  useEffect(() => {
+    if (!currentUser?.uid) return;
+    const unsubscribe = onForegroundMessage((payload) => {
+      console.log('[App] Foreground message received:', payload);
+      const { title, body, icon } = payload.notification || {};
+      if (Notification.permission === 'granted') {
+        new Notification(title || 'AuraStudy', {
+          body: body || 'You have a new notification',
+          icon: icon || '/favicon.svg',
+          tag: payload.data?.tag || 'aurastudy-foreground',
+          data: payload.data,
+        });
+      }
+      addToast(title || 'New Notification', 'info', 5000);
+    });
+    return () => unsubscribe?.();
+  }, [currentUser?.uid]);
 
   const handleAuthSubmit = async (e) => {
     e.preventDefault();
@@ -1008,6 +1037,14 @@ function App() {
     loadAllData();
   }, []);
 
+  // Check notification permission on mount
+  useEffect(() => {
+    if (typeof Notification !== 'undefined') {
+      // Force permission state sync
+      console.log('[App] Notification permission:', Notification.permission);
+    }
+  }, []);
+
     // Poll /api/ai/status every 30s. Drives the header status pill and the
   // isSimulatedAI flag used by the AI panels. No fake chat messages
   // are sent — this is a lightweight, side-effect-free status check.
@@ -1031,6 +1068,54 @@ function App() {
     const interval = setInterval(fetchStatus, 30000);
     return () => { cancelled = true; clearInterval(interval); };
   }, []);
+
+  // Service Worker registration & Foreground FCM messages
+  useEffect(() => {
+    if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
+
+    let unsubscribeForeground = () => {};
+
+    const registerSW = async () => {
+      try {
+        const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
+          scope: '/',
+        });
+        console.log('[SW] Registered:', registration.scope);
+
+        // Set up foreground message listener after SW is ready
+        if (messaging) {
+          unsubscribeForeground = onForegroundMessage((payload) => {
+            console.log('[FCM] Foreground message:', payload);
+            const title = payload.notification?.title || 'AuraStudy';
+            const body = payload.notification?.body || 'You have a new notification';
+            
+            // Show browser notification if permission granted
+            if (Notification.permission === 'granted') {
+              new Notification(title, {
+                body,
+                icon: '/favicon.svg',
+                badge: '/favicon.svg',
+                tag: payload.data?.tag || 'aurastudy-notification',
+                data: payload.data || {},
+                requireInteraction: false,
+              });
+            }
+            
+            // Also show in-app toast
+            addToast(`${title}: ${body}`, 'info', 5000);
+          });
+        }
+      } catch (err) {
+        console.warn('[SW] Registration failed:', err);
+      }
+    };
+
+    registerSW();
+
+    return () => {
+      unsubscribeForeground();
+    };
+  }, [messaging, addToast]);
 
   useEffect(() => {
     if (chatEndRef.current) {

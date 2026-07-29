@@ -2738,35 +2738,7 @@ Stay strictly on "${topic.name}" throughout your entire response.`;
             </button>
           </div>
 
-          <form onSubmit={authPendingVerification ? handleVerifyCode : handleAuthSubmit} className="auth-form">
-            {authPendingVerification ? (
-              <>
-                <div className="auth-input-group" style={{ textAlign: 'center', marginBottom: '8px' }}>
-                  <div style={{ fontSize: '48px', marginBottom: '8px' }}>📧</div>
-                  <p style={{ color: '#94a3b8', fontSize: '14px', margin: 0 }}>
-                    We sent a 6-digit code to<br />
-                    <strong style={{ color: '#e2d9f3' }}>{authEmail}</strong>
-                  </p>
-                </div>
-
-                <div className="auth-input-group">
-                  <label htmlFor="verifyCode">Verification Code</label>
-                  <input
-                    id="verifyCode"
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={6}
-                    value={authVerificationCode}
-                    onChange={(e) => setAuthVerificationCode(e.target.value.replace(/\D/g, ''))}
-                    placeholder="Enter 6-digit code"
-                    autoFocus
-                    required
-                    style={{ letterSpacing: '6px', textAlign: 'center', fontSize: '20px', fontWeight: 700 }}
-                  />
-                </div>
-              </>
-            ) : (
-              <>
+          <form onSubmit={handleAuthSubmit} className="auth-form">
             {authMode === 'signup' && (
               <div className="auth-input-group">
                 <label htmlFor="displayName">Display Name</label>
@@ -2910,8 +2882,6 @@ Stay strictly on "${topic.name}" throughout your entire response.`;
                 minLength={6}
               />
             </div>
-              </>
-            )}
 
             {authError && <div className="auth-error">{authError}</div>}
 

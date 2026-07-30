@@ -74,12 +74,11 @@ const signInWithGoogle = async () => {
   try {
     await signInWithRedirect(auth, googleProvider);
   } catch (error) {
-    if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
-      console.log('Popup blocked or closed, using redirect flow...');
-      return;
+    if (error.code !== 'auth/popup-blocked' && error.code !== 'auth/popup-closed-by-user') {
+      console.error('Google sign-in error:', error);
+      throw error;
     }
-    console.error('Google sign-in error:', error);
-    throw error;
+    return;
   }
 };
 
@@ -88,12 +87,11 @@ const signInWithApple = async () => {
   try {
     await signInWithRedirect(auth, appleProvider);
   } catch (error) {
-    if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
-      console.log('Popup blocked or closed, using redirect flow...');
-      return;
+    if (error.code !== 'auth/popup-blocked' && error.code !== 'auth/popup-closed-by-user') {
+      console.error('Apple sign-in error:', error);
+      throw error;
     }
-    console.error('Apple sign-in error:', error);
-    throw error;
+    return;
   }
 };
 

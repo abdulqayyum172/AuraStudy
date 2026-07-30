@@ -6,7 +6,6 @@ import {
   GoogleAuthProvider,
   OAuthProvider,
   signInWithRedirect,
-  getRedirectResult,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
@@ -90,21 +89,14 @@ const signInWithApple = async () => {
 };
 
 // Helper: Handle redirect result (call on app mount)
+// Firebase automatically restores the session from sessionStorage on page load,
+// so we just check auth.currentUser instead of calling getRedirectResult,
+// which internally opens a detection popup that may be blocked by popup blockers.
 const handleRedirectResult = async () => {
-  try {
-    const result = await getRedirectResult(auth);
-    return result;
-  } catch (error) {
-    if (auth.currentUser) {
-      return { user: auth.currentUser };
-    }
-    if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
-      console.log('Popup blocked/closed during redirect, this is expected in some browsers');
-      return { user: null };
-    }
-    console.error('Redirect result error:', error);
-    return { user: null };
+  if (auth.currentUser) {
+    return { user: auth.currentUser };
   }
+  return { user: null };
 };
 
 // Helper: Email/Password login

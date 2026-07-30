@@ -568,12 +568,17 @@ function App() {
     setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), duration);
   };
 
-  const [activeTab, setActiveTab] = useState('learn');
+  const [activeTab, setActiveTab] = useState(() => localStorage.getItem('aura-last-tab') || 'learn');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [curriculumLevel, setCurriculumLevel] = useState(null);
   const [curriculumSubject, setCurriculumSubject] = useState(null);
   const [curriculumSearch, setCurriculumSearch] = useState('');
   const [isSimulatedAI, setIsSimulatedAI] = useState(true);
+
+  // Persist active tab to localStorage so returning users land on their last page
+  useEffect(() => {
+    localStorage.setItem('aura-last-tab', activeTab);
+  }, [activeTab]);
 
   // Theme state
   const [theme, setTheme] = useState(() => localStorage.getItem('aura-theme') || 'light');

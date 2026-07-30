@@ -140,6 +140,4 @@ export {
   registerWithEmail,
   logout,
   onAuthStateChanged,
-  requestFCMToken,
-  onForegroundMessage,
 };

@@ -5,7 +5,7 @@ import {
   getAuth,
   GoogleAuthProvider,
   OAuthProvider,
-  signInWithRedirect,
+  signInWithPopup,
   getRedirectResult,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -69,10 +69,10 @@ export const onForegroundMessage = (callback) => {
   return onMessage(messaging, callback);
 };
 
-// Helper: Sign in with Google redirect
+// Helper: Sign in with Google popup
 const signInWithGoogle = async () => {
   try {
-    await signInWithRedirect(auth, googleProvider);
+    await signInWithPopup(auth, googleProvider);
   } catch (error) {
     if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
       throw new Error('Please allow popups for this site to sign in with Google.');
@@ -82,10 +82,10 @@ const signInWithGoogle = async () => {
   }
 };
 
-// Helper: Sign in with Apple redirect
+// Helper: Sign in with Apple popup
 const signInWithApple = async () => {
   try {
-    await signInWithRedirect(auth, appleProvider);
+    await signInWithPopup(auth, appleProvider);
   } catch (error) {
     if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
       throw new Error('Please allow popups for this site to sign in with Apple.');

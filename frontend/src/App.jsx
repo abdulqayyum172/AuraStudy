@@ -987,15 +987,20 @@ function App() {
         pendingDepartmentRef.current = isHigherInstitutionLevel(authClassLevel) ? authDepartment : '';
         pendingCourseRef.current = isHigherInstitutionLevel(authClassLevel) ? authCourse : '';
       }
-      if (provider === 'Google') {
-        await signInWithGoogle();
-      } else if (provider === 'Apple') {
-        await signInWithApple();
-      }
+      try {
+        if (provider === 'Google') {
+          await signInWithGoogle();
+        } else if (provider === 'Apple') {
+          await signInWithApple();
+        }
       } catch (err) {
         console.error('Social login error:', err);
         if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request' && err.code !== 'auth/popup-blocked') {
           setAuthError(err.message || `${provider} sign-in failed. Please try again.`);
+        } else {
+          // For popup-blocked, popup-closed-by-user, and cancelled-popup-request errors,
+          // signInWithGoogle/signInWithApple already return early, so we can continue
+          console.log('Popup blocked, redirect flow will handle this');
         }
       }
     } finally {

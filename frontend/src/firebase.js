@@ -76,6 +76,7 @@ const signInWithGoogle = async () => {
   } catch (error) {
     if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
       console.log('Popup blocked or closed, using redirect flow...');
+      return;
     }
     console.error('Google sign-in error:', error);
     throw error;
@@ -89,6 +90,7 @@ const signInWithApple = async () => {
   } catch (error) {
     if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
       console.log('Popup blocked or closed, using redirect flow...');
+      return;
     }
     console.error('Apple sign-in error:', error);
     throw error;

@@ -95,15 +95,15 @@ const handleRedirectResult = async () => {
     const result = await getRedirectResult(auth);
     return result;
   } catch (error) {
+    if (auth.currentUser) {
+      return { user: auth.currentUser };
+    }
     if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
-      if (auth.currentUser) {
-        return { user: auth.currentUser };
-      }
       console.log('Popup blocked/closed during redirect, this is expected in some browsers');
       return { user: null };
     }
     console.error('Redirect result error:', error);
-    throw error;
+    return { user: null };
   }
 };
 

@@ -999,8 +999,8 @@ function App() {
           setAuthError(err.message || `${provider} sign-in failed. Please try again.`);
         } else {
           // For popup-blocked, popup-closed-by-user, and cancelled-popup-request errors,
-          // signInWithGoogle/signInWithApple already return early, so we can continue
-          console.log('Popup blocked, redirect flow will handle this');
+          // show a user-friendly message asking them to allow popups
+          setAuthError('Please allow popups for this site to continue with Google or Apple sign-in.');
         }
       }
     } finally {

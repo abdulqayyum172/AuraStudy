@@ -995,12 +995,8 @@ function App() {
         }
       } catch (err) {
         console.error('Social login error:', err);
-        if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request' && err.code !== 'auth/popup-blocked') {
+        if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
           setAuthError(err.message || `${provider} sign-in failed. Please try again.`);
-        } else {
-          // For popup-blocked, popup-closed-by-user, and cancelled-popup-request errors,
-          // show a user-friendly message asking them to allow popups
-          setAuthError('Please allow popups for this site to continue with Google or Apple sign-in.');
         }
       }
     } finally {

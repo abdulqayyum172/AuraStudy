@@ -902,7 +902,17 @@ function App() {
     setAuthLoading(true);
     try {
       if (authMode === 'login') {
-        await loginWithEmail(authEmail.trim(), authPassword);
+        const userCred = await loginWithEmail(authEmail.trim(), authPassword);
+        setCurrentUser({
+          uid: userCred.user.uid,
+          username: userCred.user.displayName || userCred.user.email?.split('@')[0] || 'User',
+          email: userCred.user.email,
+          photoURL: userCred.user.photoURL,
+          classLevel: '',
+          stream: '',
+          department: '',
+          course: '',
+        });
       } else {
         const trimmedEmail = authEmail.trim();
         const trimmedName = authDisplayName.trim();
@@ -930,6 +940,20 @@ function App() {
 
         // Register directly with Firebase (no email verification step)
         await registerWithEmail(trimmedEmail, authPassword, trimmedName || undefined);
+
+        const currentFirebaseUser = auth.currentUser;
+        if (currentFirebaseUser) {
+          setCurrentUser({
+            uid: currentFirebaseUser.uid,
+            username: currentFirebaseUser.displayName || trimmedName || currentFirebaseUser.email?.split('@')[0] || 'User',
+            email: currentFirebaseUser.email,
+            photoURL: currentFirebaseUser.photoURL,
+            classLevel: pendingClassLevelRef.current || '',
+            stream: pendingStreamRef.current || '',
+            department: pendingDepartmentRef.current || '',
+            course: pendingCourseRef.current || '',
+          });
+        }
 
         setAuthEmail('');
         setAuthPassword('');

@@ -6,6 +6,7 @@ import {
   GoogleAuthProvider,
   OAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
   getRedirectResult,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -69,29 +70,31 @@ export const onForegroundMessage = (callback) => {
   return onMessage(messaging, callback);
 };
 
-// Helper: Sign in with Google popup
+// Helper: Sign in with Google (popup preferred, redirect fallback)
 const signInWithGoogle = async () => {
   try {
     await signInWithPopup(auth, googleProvider);
-  } catch (error) {
-    if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+  } catch (popupError) {
+    if (popupError.code === 'auth/popup-blocked' || popupError.code === 'auth/popup-closed-by-user') {
       throw new Error('Please allow popups for this site to sign in with Google.');
     }
-    console.error('Google sign-in error:', error);
-    throw error;
+    // Popup failed for other reasons (e.g. third-party cookie blocking in Safari) — try redirect fallback
+    console.warn('Google sign-in popup failed, falling back to redirect flow:', popupError);
+    await signInWithRedirect(auth, googleProvider);
   }
 };
 
-// Helper: Sign in with Apple popup
+// Helper: Sign in with Apple (popup preferred, redirect fallback)
 const signInWithApple = async () => {
   try {
     await signInWithPopup(auth, appleProvider);
-  } catch (error) {
-    if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+  } catch (popupError) {
+    if (popupError.code === 'auth/popup-blocked' || popupError.code === 'auth/popup-closed-by-user') {
       throw new Error('Please allow popups for this site to sign in with Apple.');
     }
-    console.error('Apple sign-in error:', error);
-    throw error;
+    // Popup failed for other reasons — try redirect fallback
+    console.warn('Apple sign-in popup failed, falling back to redirect flow:', popupError);
+    await signInWithRedirect(auth, appleProvider);
   }
 };
 

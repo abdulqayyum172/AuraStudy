@@ -619,7 +619,18 @@
   height: 100%;
   background: var(--accent-primary);
   border-radius: 3px;
-  transition: width 0.2s ease;
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.study-progress-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 1.8s infinite;
 }
 
 /* Flashcard */
@@ -2331,6 +2342,12 @@
   color: var(--text-on-accent);
   font-weight: 800;
   font-size: 0.85rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.landing-brand:hover .landing-brand-mark {
+  transform: scale(1.08) rotate(-4deg);
+  box-shadow: 0 4px 14px rgba(108, 71, 245, 0.35);
 }
 
 .landing-brand-mark img {
@@ -2432,6 +2449,54 @@
   padding: 110px clamp(20px, 6vw, 80px) 80px;
   overflow: hidden;
   background: var(--landing-bg);
+}
+
+.landing-hero-orbs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.landing-hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(108, 71, 245, 0.18) 0%, transparent 65%);
+  filter: blur(50px);
+  animation: floatOrb 22s ease-in-out infinite;
+  opacity: 0;
+}
+
+.landing-hero-orbs::before,
+.landing-hero-orbs::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(108, 71, 245, 0.14) 0%, transparent 65%);
+  filter: blur(60px);
+  animation: floatOrb 26s ease-in-out infinite;
+  opacity: 0.18;
+}
+
+.landing-hero-orbs::before {
+  width: 320px; height: 320px;
+  top: 12%; left: 5%;
+  animation-delay: 0s;
+}
+
+.landing-hero-orbs::after {
+  width: 280px; height: 280px;
+  bottom: 8%; right: 6%;
+  background: radial-gradient(circle, rgba(46, 168, 223, 0.14) 0%, transparent 65%);
+  animation-delay: 4s;
+}
+
+@keyframes floatOrb {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.14; }
+  25% { transform: translate(24px, -18px) scale(1.08); opacity: 0.22; }
+  50% { transform: translate(-10px, 30px) scale(1); opacity: 0.18; }
+  75% { transform: translate(18px, 22px) scale(1.06); opacity: 0.2; }
 }
 
 .landing-hero-bg-glow {
@@ -2688,6 +2753,29 @@
 
 .landing-hero-visual {
   animation: heroZoom 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+  will-change: transform;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-network-bg {
+  position: absolute;
+  inset: -40px;
+  width: calc(100% + 80px);
+  height: calc(100% + 80px);
+  z-index: 1;
+  opacity: 0.7;
+  overflow: visible;
+}
+
+.hero-network-bg circle {
+  r: 0;
+  animation: nodePop 3s ease-in-out infinite;
+}
+
+@keyframes nodePop {
+  0%, 100% { opacity: 0.05; }
+  50% { opacity: 0.18; }
 }
 
 @keyframes heroZoom {
@@ -2723,6 +2811,32 @@
   letter-spacing: -0.02em;
   margin: 0 0 12px;
   font-weight: 700;
+  position: relative;
+  padding-bottom: 14px;
+}
+
+.landing-section-heading h2::after,
+.landing-final-cta h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 48px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--accent-gradient);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.landing-section-heading h2::after {
+  background: linear-gradient(90deg, var(--accent-primary) 40%, transparent 100%);
+}
+
+.landing-section-heading.is-revealed h2::after,
+.landing-final-cta.is-revealed h2::after {
+  transform: scaleX(1);
 }
 
 .landing-section-sub {
@@ -2756,6 +2870,19 @@
   font-weight: 800;
   letter-spacing: -0.03em;
   margin-bottom: 4px;
+  transform: rotate(0deg);
+  transition: transform 0.4s ease;
+}
+
+.is-revealed .landing-metric-num {
+  animation: metricPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: calc(var(--rd, 0ms) + 0.1s);
+}
+
+@keyframes metricPop {
+  0% { opacity: 0; transform: scale(0.4) rotate(-12deg); }
+  60% { transform: scale(1.15) rotate(2deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 
 .landing-metric-label {
@@ -3770,20 +3897,22 @@
   border-color: var(--accent-primary);
   background: var(--accent-primary-medium);
   color: var(--accent-primary);
+  animation: popIn 0.3s ease both;
 }
 
 .quiz-mode-card {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .quiz-mode-card:hover {
   border-color: var(--accent-primary) !important;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--accent-glow);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px var(--accent-glow);
 }
 
 .quiz-mode-card.active {
   box-shadow: 0 0 16px var(--accent-glow-strong);
+  animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 .quiz-progress-bar {
@@ -3867,6 +3996,17 @@
 }
 
 .chat-suggestion-chip {
+  animation: fadeInUp 0.35s ease both;
+}
+
+.chat-suggestion-chip:nth-child(1) { animation-delay: 0.04s; }
+.chat-suggestion-chip:nth-child(2) { animation-delay: 0.08s; }
+.chat-suggestion-chip:nth-child(3) { animation-delay: 0.12s; }
+.chat-suggestion-chip:nth-child(4) { animation-delay: 0.16s; }
+.chat-suggestion-chip:nth-child(5) { animation-delay: 0.2s; }
+.chat-suggestion-chip:nth-child(6) { animation-delay: 0.24s; }
+
+.chat-suggestion-chip {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -3896,6 +4036,25 @@
 
 .chat-suggestion-chip:hover .chat-suggestion-icon {
   transform: scale(1.15) rotate(-6deg);
+}
+
+/* Shimmer / skeleton loader */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-ghost);
+  border-radius: 6px;
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 50%, transparent 100%);
+  background-size: 20px 100%;
+  animation: shimmer 1.6s infinite;
+}
+[data-theme="dark"] .skeleton::after {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.07) 50%, transparent 100%);
 }
 
 /* ==================== Quiz Timer ==================== */

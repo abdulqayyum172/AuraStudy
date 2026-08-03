@@ -5,6 +5,7 @@ import logoImage from '../assets/image(1).png';
 const LandingPage = ({ landingScrolled, setAuthMode, setShowAuth }) => {
   return (
     <div className="landing-page">
+      <div className="landing-hero-orbs" aria-hidden="true"></div>
       <nav className={`landing-nav${landingScrolled ? ' landing-nav-scrolled' : ''}`}>
         <button className="landing-brand" type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           <span className="landing-brand-mark">
@@ -69,6 +70,24 @@ const LandingPage = ({ landingScrolled, setAuthMode, setShowAuth }) => {
             </div>
           </div>
           <div className="landing-hero-visual" data-reveal>
+            <svg className="hero-network-bg" viewBox="0 0 560 560" aria-hidden="true">
+              <defs>
+                <linearGradient id="hero-grad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="var(--accent-primary)" />
+                  <stop offset="100%" stopColor="var(--accent-secondary)" />
+                </linearGradient>
+              </defs>
+              {Array.from({ length: 14 }).map((_, i) => {
+                const cx = 120 + (i % 7) * 48 + (i % 2 === 0 ? 12 : 0);
+                const cy = 120 + Math.floor(i / 7) * 160 + (i % 3 === 0 ? 8 : 0);
+                const r = 3 + (i % 4);
+                return (
+                  <circle key={i} cx={cx} cy={cy} r={r} fill="url(#hero-grad)" opacity="0.12">
+                    <animate attributeName="opacity" values="0.06;0.22;0.06" dur="6s" delay={`${i * 0.3}s`} repeatCount="indefinite" />
+                  </circle>
+                );
+              })}
+            </svg>
             <div className="landing-hero-card-stack">
               <div className="landing-float-card landing-float-card-1">
                 <span className="landing-float-icon">

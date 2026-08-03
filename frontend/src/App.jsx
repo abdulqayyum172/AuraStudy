@@ -768,9 +768,19 @@ function App() {
 
   // Tracks whether the page has been scrolled — used to give the landing
   // nav a "compact glass" look once the hero has scrolled out of view.
+  // Also drives a subtle parallax transform on the hero visual so the
+  // card stack layers as the user scrolls.
   const [landingScrolled, setLandingScrolled] = useState(false);
   useEffect(() => {
-    const onScroll = () => setLandingScrolled(window.scrollY > 24);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setLandingScrolled(y > 24);
+      const heroVisual = document.querySelector('.landing-hero-visual');
+      if (heroVisual) {
+        heroVisual.style.transform = `translateY(${Math.min(y * 0.24, 120)}px) scale(${1 - Math.min(y * 0.0003, 0.05)})`;
+      }
+    };
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);

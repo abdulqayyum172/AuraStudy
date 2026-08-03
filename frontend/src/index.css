@@ -258,6 +258,9 @@ h1, h2, h3, h4, h5, h6 {
 .animate-float { animation: floatY 5s ease-in-out infinite; }
 .animate-glow { animation: glowPulse 2.4s ease-out infinite; }
 .animate-wave { animation: wave 2s ease-in-out infinite; transform-origin: 70% 70%; }
+.animate-spin-slow { animation: spinSlow 8s linear infinite; }
+.animate-shimmer { background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 50%, rgba(0,0,0,0) 100%); background-size: 20px 100%; animation: shimmer 1.6s infinite; }
+[data-theme="dark"] .animate-shimmer { background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(255,255,255,0.05) 50%, rgba(0,0,0,0) 100%); }
 
 /* Staggered entrance (parent applies, children stagger via nth-child) */
 .stagger-children > * { opacity: 0; animation: fadeInUp 0.45s ease both; }

@@ -1,5 +1,5 @@
 import { getSubjectsForClass } from '../data/constants';
-import { QuizIcon } from '../data/icons';
+import { QuizIcon } from '../data/icons.jsx';
 
 export default function QuizTab({
   currentUser,

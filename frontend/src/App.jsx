@@ -4,6 +4,7 @@ import heroImage from './assets/hero.png';
 import logoImage from './assets/image(1).png';
 import PlannerTab from './components/PlannerTab.jsx';
 import PomodoroTab from './components/PomodoroTab.jsx';
+import QuizTab from './components/QuizTab.jsx';
 import SettingsTab from './components/SettingsTab.jsx';
 
 class ErrorBoundary extends Component {
@@ -3096,6 +3097,11 @@ Stay strictly on "${topic.name}" throughout your entire response.`;
                 <NotesIcon /> Study Notes
               </button>
             </li>
+            <li className={`nav-item ${activeTab === 'quiz' ? 'active' : ''}`}>
+              <button onClick={() => { setActiveTab('quiz'); setActiveDeck(null); setIsReviewMode(false); setMobileMenuOpen(false); }} id="nav-quiz">
+                <QuizIcon /> Quiz Generator
+              </button>
+            </li>
             <li className={`nav-item ${activeTab === 'planner' ? 'active' : ''}`}>
               <button onClick={() => { setActiveTab('planner'); setActiveDeck(null); setIsReviewMode(false); setMobileMenuOpen(false); }} id="nav-planner">
                 <PlannerIcon /> Study Planner
@@ -3942,6 +3948,44 @@ Stay strictly on "${topic.name}" throughout your entire response.`;
             handleCreateTask={handleCreateTask}
             updateTaskStatus={updateTaskStatus}
             handleDeleteTask={handleDeleteTask}
+          />
+        )}
+
+        {/* ==================== QUIZ TAB ==================== */}
+        {activeTab === 'quiz' && (
+          <QuizTab
+            currentUser={currentUser}
+            quizInput={quizInput}
+            setQuizInput={setQuizInput}
+            quizCount={quizCount}
+            setQuizCount={setQuizCount}
+            quizDifficulty={quizDifficulty}
+            setQuizDifficulty={setQuizDifficulty}
+            quizMode={quizMode}
+            setQuizMode={setQuizMode}
+            quizQuestions={quizQuestions}
+            quizAnswers={quizAnswers}
+            quizSubmitted={quizSubmitted}
+            quizLoading={quizLoading}
+            quizScore={quizScore}
+            quizTimeLeft={quizTimeLeft}
+            quizTimerActive={quizTimerActive}
+            quizCurrentQuestionIndex={quizCurrentQuestionIndex}
+            setQuizCurrentQuestionIndex={setQuizCurrentQuestionIndex}
+            quizBookmarked={quizBookmarked}
+            quizReviewFilter={quizReviewFilter}
+            setQuizReviewFilter={setQuizReviewFilter}
+            quizHistory={quizHistory}
+            quizStats={quizStats}
+            selectedHistoryRecord={selectedHistoryRecord}
+            setSelectedHistoryRecord={setSelectedHistoryRecord}
+            handleGenerateQuiz={handleGenerateQuiz}
+            handleQuizAnswer={handleQuizAnswer}
+            handleToggleBookmark={handleToggleBookmark}
+            handleSubmitQuiz={handleSubmitQuiz}
+            handleConvertWrongAnswersToFlashcards={handleConvertWrongAnswersToFlashcards}
+            handleRetakeQuiz={handleRetakeQuiz}
+            handleResetQuiz={handleResetQuiz}
           />
         )}
 

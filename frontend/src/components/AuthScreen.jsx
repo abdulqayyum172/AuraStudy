@@ -1,4 +1,4 @@
-import { GoogleIcon, AppleIcon } from '../data/icons';
+import { GoogleIcon, AppleIcon } from '../data/icons.jsx';
 import { getSubjectsForClass } from '../data/constants';
 
 export default function AuthScreen({

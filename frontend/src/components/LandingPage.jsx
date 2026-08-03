@@ -1,5 +1,5 @@
 import React from 'react';
-import { DashboardIcon, CardsIcon, TimerIcon, NotesIcon, AIIcon, LearnIcon, CurriculumIcon, QuizIcon } from '../data/icons';
+import { DashboardIcon, CardsIcon, TimerIcon, NotesIcon, AIIcon, LearnIcon, CurriculumIcon, QuizIcon } from '../data/icons.jsx';
 import logoImage from '../assets/image(1).png';
 
 const LandingPage = ({ landingScrolled, setAuthMode, setShowAuth }) => {

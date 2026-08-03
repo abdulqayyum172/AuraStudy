@@ -3180,8 +3180,8 @@ Stay strictly on "${topic.name}" throughout your entire response.`;
                   <div className="dash-greeting-text">
                     <h1>
                       {currentUser
-                        ? `Welcome back, ${currentUser.username?.split(' ')[0] || 'Student'} 👋`
-                        : 'What do you want to learn? 👋'}
+                        ? `Welcome back, ${currentUser.username?.split(' ')[0] || 'Student'} ` : 'What do you want to learn? '}
+                      <span className="animate-wave" style={{ display: 'inline-block' }}>👋</span>
                     </h1>
                     <p>
                       {currentUser?.classLevel

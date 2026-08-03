@@ -8,6 +8,69 @@ import { simulateAIResponse } from '../services/knowledgeBase.js';
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 
+// ── Quiz-in-Chat: Gemini generates questions AND answers in the assistant ───
+const QUIZ_REQUEST_RE = /(?:quiz me|quiz on|quiz about|make(?: me)? a quiz|create a quiz|generate a quiz|give me a quiz|a quiz on|let'?s (?:take|do) a quiz|test me|test my knowledge|test me on|practice questions|practice quiz|multiple.?choice questions|assessment on|question me on|questions on)/i;
+const QUIZ_NUMBER_RE = /(\d+)\s*(?:questions?|quizzes|mcq|mcqs)/i;
+
+function detectQuizRequest(message) {
+  if (!message || !QUIZ_REQUEST_RE.test(message)) return null;
+  let count = 5;
+  const countMatch = message.match(QUIZ_NUMBER_RE);
+  if (countMatch) count = Math.min(Math.max(parseInt(countMatch[1], 10) || 5, 1), 10);
+  return { count };
+}
+
+const QUIZ_SYSTEM_INSTRUCTION = `You are Aura's quiz generator built into AuraStudy. The user has asked you to quiz them. You MUST:
+1. Generate exactly the requested number of multiple-choice questions STRICTLY about the topic the user asked about — nothing else. Never switch to a different, related, or more popular topic.
+2. For every question show 4 options labelled A, B, C, D.
+3. AFTER each question, immediately give the correct answer and a short explanation (this is a study/self-test format — the answers are shown in the chat so the student can check and learn).
+4. Tailor the difficulty and vocabulary to the student's level when it is provided.
+5. Format using clean GitHub-flavored markdown exactly as shown below.
+
+Format template:
+## 📝 Quiz: <Topic>
+*<level/difficulty line, e.g. "5 Medium questions tailored for a SSS 2 Science student">*
+
+**Question 1:** <question text>
+- **A.** option A
+- **B.** option B
+- **C.** option C
+- **D.** option D
+**✅ Answer:** A — <correct option text>
+**💡 Explanation:** <1-2 sentence explanation>
+
+Repeat for every question. End with a short, encouraging closing line.`;
+
+function buildQuizPrompt(message, count) {
+  return `Generate a quiz of ${count} multiple-choice questions about the topic I requested in this message.
+
+My request: "${message}"
+
+Follow your quiz format exactly: show each question with options A-D, then give the correct answer and a short explanation right after each question. Generate exactly ${count} questions, all strictly about the topic I requested.`;
+}
+
+function formatQuizMarkdown(quizArray, topic) {
+  if (!Array.isArray(quizArray) || quizArray.length === 0) return null;
+  const lines = [
+    `## 📝 Quiz: ${(topic || 'Study Topic').split('\n')[0].substring(0, 80)}`,
+    `*${quizArray.length} questions with answers shown for self-checking.*`,
+    '',
+  ];
+  const letters = ['A', 'B', 'C', 'D'];
+  quizArray.forEach((q, i) => {
+    lines.push(`**Question ${i + 1}:** ${q.question}`);
+    for (const L of letters) {
+      if (q.options && q.options[L]) lines.push(`- **${L}.** ${q.options[L]}`);
+    }
+    const answerText = q.options && q.options[q.correct] ? ` — ${q.options[q.correct]}` : '';
+    lines.push(`**✅ Answer:** ${q.correct}${answerText}`);
+    if (q.explanation) lines.push(`**💡 Explanation:** ${q.explanation}`);
+    lines.push('');
+  });
+  lines.push('*Keep studying! Would you like another quiz or more detail on this topic?*');
+  return lines.join('\n');
+}
+
 // ── Helper: Call Gemini API (non-streaming) ───────────────────────────────────
 async function askGemini(prompt, systemPrompt = SYSTEM_INSTRUCTION, temperature = 0.7) {
   if (!GEMINI_KEY) throw new Error('GEMINI_API_KEY is not configured on the server.');
@@ -182,7 +245,11 @@ router.post('/chat', async (req, res) => {
   if (!message) return res.status(400).json({ error: 'Message is required' });
 
   const context = buildStudentContext(classLevel, course, stream, department);
-  const systemPrompt = SYSTEM_INSTRUCTION + (context ? '\n\n' + context : '');
+
+  // Detect quiz requests so Gemini generates the quiz WITH answers in the chat.
+  const quizInfo = detectQuizRequest(message);
+  const systemPrompt = (quizInfo ? QUIZ_SYSTEM_INSTRUCTION : SYSTEM_INSTRUCTION) + (context ? '\n\n' + context : '');
+  const effectiveMessage = quizInfo ? buildQuizPrompt(message, quizInfo.count) : message;
 
   let imageParts = null;
   if (image && image.base64 && image.mimeType) {
@@ -205,7 +272,7 @@ router.post('/chat', async (req, res) => {
   try {
     // Try streaming first
     let fullReply = '';
-    for await (const chunk of streamGemini(message, history || [], systemPrompt, imageParts)) {
+    for await (const chunk of streamGemini(effectiveMessage, history || [], systemPrompt, imageParts)) {
       fullReply += chunk;
       res.write(`data: ${JSON.stringify({ type: 'chunk', text: chunk })}\n\n`);
     }
@@ -220,7 +287,7 @@ router.post('/chat', async (req, res) => {
 
   try {
     // Fallback: non-streaming
-    const reply = await askGeminiWithHistory(message, history || [], systemPrompt, imageParts);
+    const reply = await askGeminiWithHistory(effectiveMessage, history || [], systemPrompt, imageParts);
     res.write(`data: ${JSON.stringify({ type: 'done', reply, isSimulated: false })}\n\n`);
     return res.end();
   } catch (err) {
@@ -229,7 +296,13 @@ router.post('/chat', async (req, res) => {
     // If Gemini fails (rate limit, quota, etc.), fall back to the built-in knowledge base
     if (err.message.includes('429') || err.message.includes('quota') || err.message.includes('RESOURCE_EXHAUSTED')) {
       try {
-        const kbReply = simulateAIResponse('chat', message, history || [], { classLevel, course, stream, department });
+        let kbReply;
+        if (quizInfo) {
+          const kbQuiz = simulateAIResponse('generate-quiz', message, [], { classLevel, course, stream, department });
+          kbReply = formatQuizMarkdown(kbQuiz, message) || simulateAIResponse('chat', message, history || [], { classLevel, course, stream, department });
+        } else {
+          kbReply = simulateAIResponse('chat', message, history || [], { classLevel, course, stream, department });
+        }
         res.write(`data: ${JSON.stringify({ type: 'done', reply: kbReply, isSimulated: true })}\n\n`);
         return res.end();
       } catch (kbErr) {
